@@ -1,0 +1,21 @@
+.footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(8, 8, 8, 0.4);
+    
+}
+.footer h3{
+    color: rgb(26, 194, 216);
+     text-align: right;
+}
+/* 
+@media screen and (max-width: 752px){
+    .footer{
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+
+    }
+} */
