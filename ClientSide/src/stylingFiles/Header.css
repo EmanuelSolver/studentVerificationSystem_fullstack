@@ -55,16 +55,15 @@
   }
   
   .nav-links {
-    z-index: 999;
     color: #fff;
-
+    padding-top: 30px;
     text-decoration: none;
-    padding: 0.5rem 1rem;
+    padding:  1rem;
     height: 80%;
   }
   
   .nav-links:hover {
-    border-bottom: 4px solid #0a1af3;
+    border-bottom: 4px solid #3842c9;
     transition: all 0.2s ease-out;
   }
   
@@ -77,7 +76,7 @@
     .nav-links {
       display: block;
       text-align: left;
-    
+      font-weight: 700;
       width: 55%;
     }
   
@@ -91,14 +90,5 @@
         color: rgb(128, 130, 235);
         font-size: calc(150%);
     }
-  
-/* .menu-icon {
-      display: block;
-      position: absolute;
-      top: 0;
-      right: 0;
-      transform: translate(-100%, 60%);
-      font-size: 1.8rem;
-      cursor: pointer;
-} */
+
 }  

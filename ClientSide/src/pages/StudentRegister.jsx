@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import '../stylingfiles/StudentRegister.css';
+import '../stylingFiles/StudentRegister.css';
 
 const departments = ['Arts & Sociology', 'Business & Education', 'Construction & Engineering', 'Pure & Applied Sciences'];
 const courses = ['Fashion Design', 'Film Production','Economics & Statistics', 'Business commerce', 'Mechanical Engineering','Electrical Engineering', 'Forensics', 'Mathematics & Computer Science']; // Replace with your course options
@@ -16,7 +16,7 @@ const SignUpForm = () => {
       'Add International phone No'
     ),
     regNo: yup.string().required('Please, Add Registration Number'),
-    idno: yup.number().required('Enter a number'),
+    idNo: yup.number().required('Enter a number'),
     course: yup.string().required("select your course"),
  });
 
@@ -77,16 +77,16 @@ const SignUpForm = () => {
         </div> 
 
         <div>
-          <label htmlFor="idno">National ID:</label> <br />
-            <input type="number" id="idno" {...register("idno")}/>
-            <p>{errors.idno?.message}</p>
+          <label htmlFor="idNo">National ID:</label> <br />
+            <input type="number" id="idNo" {...register("idNo")}/>
+            <p>{errors.idNo?.message}</p>
         </div> 
 
-        <div>
+        {/* <div>
           <label htmlFor="date">Registration Date:</label>
           <input type="date" {...register("date")} />
             <p>{errors.date?.message}</p>
-        </div>
+        </div> */}
 
         <div>
           <label htmlFor="name">Department:</label>

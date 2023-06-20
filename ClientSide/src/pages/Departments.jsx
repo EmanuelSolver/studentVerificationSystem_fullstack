@@ -20,9 +20,9 @@ const Departments = () => {
       {
         data.map((item, index) => (
           <>
-            <div className="card">
-              <h2 key={index}>{item.title}</h2>
-              <p>{item.description}</p>
+            <div className="card" key={index}>
+              <h2 >{item.title}</h2>
+              <p >{item.description}</p>
           </div>
           </> 
       ))}
