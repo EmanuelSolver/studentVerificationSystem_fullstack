@@ -8,8 +8,10 @@ import { MdAdminPanelSettings } from "react-icons/md"
 import { MdArticle } from "react-icons/md";
 import { ImNewspaper } from "react-icons/im";
 import { VscSymbolEnumMember } from "react-icons/vsc"
+import { GiArchiveRegister } from "react-icons/gi"
 import { MdSchool } from "react-icons/md"
-{/* <a href="https://www.freepik.com/free-vector/blue-pink-wavy-shapes-transparent-background_1260393.htm#query=transparent%20png&position=33&from_view=keyword&track=ais">Image by Creative_hat</a> on Freepik */}
+
+
 const Header = () => {
   const [click, setClick] = useState(false);
 
@@ -35,6 +37,7 @@ const Header = () => {
                   <Link to="/admin" className='nav-links' onClick={closeMobileMenu}><MdAdminPanelSettings/> Admin</Link>
                   <Link to="/lectureLogin" className='nav-links' onClick={closeMobileMenu}><VscSymbolEnumMember/>Staff</Link>
                   <Link to="/studentLogin" className='nav-links' onClick={closeMobileMenu}><ImNewspaper /> Portal</Link>
+                  <Link to="./studentregister" className='nav-links' onClick={closeMobileMenu}><GiArchiveRegister /> Register</Link>
                   <Link to="/departments" className='nav-links' onClick={closeMobileMenu}><MdArticle /> Departments</Link>
 
                 </li>

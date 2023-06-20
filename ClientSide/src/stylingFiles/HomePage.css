@@ -1,3 +1,4 @@
+
 .container {
     
     background-position: center;
@@ -6,22 +7,26 @@
     padding: 20px;
     width: 100%;
     height: 70%;
+    display: flex;
+    flex-direction: column;
     
   }
 
  .content {
     display: flex;
+    width: 95%;
     gap: 2rem;
     text-align: left;
     font-weight: 700; 
+
   }
-  
-  
-  .image {
-    display: flex;
-      
+  .content img{
+    border-radius: 5%;
+    height: 100%;
   }
-  
+.content p{
+  line-height: 2;
+}
   .heading { 
     font-size: 40px;
     color: #f6f8f8;
@@ -29,9 +34,9 @@
   }
   
   .sub-head {
-    position: absolute;
+    /* position: absolute;
     left: 51%;
-    top: 9%;
+    top: 9%; */
     font-size: 2rem;
     color: #c9d9e9;
     text-align: justify;

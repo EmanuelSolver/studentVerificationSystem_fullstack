@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import '../stylingFiles/StudentRegister.css';
 import '../stylingFiles/StudentLogin.css';
 
+
 const AdminLogin = () => {
  const schema = yup.object().shape({
     password: yup.string().required(),

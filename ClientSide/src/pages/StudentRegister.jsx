@@ -3,6 +3,8 @@ import { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import '../stylingFiles/StudentRegister.css';
+import '../stylingFiles/StudentLogin.css';
+
 
 const departments = ['Arts & Sociology', 'Business & Education', 'Construction & Engineering', 'Pure & Applied Sciences'];
 const courses = ['Fashion Design', 'Film Production','Economics & Statistics', 'Business commerce', 'Mechanical Engineering','Electrical Engineering', 'Forensics', 'Mathematics & Computer Science']; // Replace with your course options
@@ -38,7 +40,14 @@ const SignUpForm = () => {
   };
 
   return (
-    <form className="simple-form" onSubmit={handleSubmit(dataToServer)}>
+    <>  
+      <div id="background-video">
+          <video  autoPlay loop muted>
+            <source src="video-2.mp4" type="video/mp4" />
+          </video>
+        </div>
+
+        <form className="simple-form" onSubmit={handleSubmit(dataToServer)}>
         <div>
           <h2><i>Student Registration</i> </h2>
         </div>
@@ -82,18 +91,12 @@ const SignUpForm = () => {
             <p>{errors.idNo?.message}</p>
         </div> 
 
-        {/* <div>
-          <label htmlFor="date">Registration Date:</label>
-          <input type="date" {...register("date")} />
-            <p>{errors.date?.message}</p>
-        </div> */}
-
         <div>
           <label htmlFor="name">Department:</label>
             <select name="department" id="department" {...register("department")}>
                 <option > - select - </option>
                 {departments.map((dept, index) => (
-                    <option key={dept} value={index}> {dept} </option>
+                    <option key={dept} value={index + 1}> {dept} </option>
                 ))}
             </select>
           
@@ -105,7 +108,7 @@ const SignUpForm = () => {
             <select name="course" id="course" {...register("course")}>
                 <option > - select - </option>
                 {courses.map((course, index) => (
-                    <option key={index} value={index}> {course} </option>
+                    <option key={index} value={index + 1}> {course} </option>
                 ))}
             </select>
           
@@ -116,6 +119,8 @@ const SignUpForm = () => {
     
       
     </form>
+    </>
+    
   );
 };
 
