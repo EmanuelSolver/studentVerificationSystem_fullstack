@@ -1,39 +1,40 @@
 .container {
-    position: absolute;
+    
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-
     padding: 20px;
     width: 100%;
     height: 70%;
-    display: flex;
-    align-items: center;
+    
   }
 
-  .image {
-    width: 30%;
-    height: auto;
-    margin-right: 20px;   
-  }
-  
  .content {
-    position: absolute;
-    left: 25%;
-    float: left;
+    display: flex;
+    gap: 2rem;
     text-align: left;
-    width: 50%;
+    font-weight: 700; 
   }
   
-  .heading {
+  
+  .image {
+    display: flex;
+      
+  }
+  
+  .heading { 
     font-size: 40px;
     color: #f6f8f8;
-    margin-bottom: 10px;
+    z-index: 2;
   }
   
-  .description {
+  .sub-head {
+    position: absolute;
+    left: 51%;
+    top: 9%;
     font-size: 2rem;
     color: #c9d9e9;
+    text-align: justify;
   }
   
   .button {
@@ -54,10 +55,23 @@
         padding: 20px;
         text-align: center;
       }
-      
+    .content{
+      display: block;
+      margin-left: 25%;
+    }
+
   .image {
     margin-left: 1rem;
-    width: 100%;
-    
+    width: 100%;  
+  }
+
+  .heading { 
+    margin-left: 7rem;
+    font-size: 40px;
+    color: #f6f8f8;
+  }
+  .sub-head{
+    position: relative;
+    left: 0%;
   }
   }
