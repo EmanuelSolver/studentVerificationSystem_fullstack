@@ -14,7 +14,7 @@ const Home = () => {
         <div className="container">
         
           <div className="content">
-          <img src="barretr-Book.svg" alt="image" className="image" />
+          <img src="students.jpg" alt="image" className="image" />
             <h1 className="heading">Welcome to ourCollege</h1>
             <p className="description">Creativity convergence</p>
             <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident quisquam, cum excepturi fuga eveniet sapiente sit? Repellat nostrum reprehenderit necessitatibus, quasi, excepturi, ipsa assumenda magnam incidunt obcaecati facilis enim perspiciatis? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Deleniti qui nemo beatae consectetur laboriosam voluptates ipsam natus blanditiis enim, in ducimus atque officiis? Adipisci, facilis iste labore impedit totam repellat!</span>
