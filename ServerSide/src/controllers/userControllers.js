@@ -1,6 +1,6 @@
 import sql from 'mssql';
-import config from '../db/config.js';
-import bcrypt from 'bcrypt';
+import config from '../db/config.js'; 
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 
 
@@ -13,8 +13,9 @@ export const loginRequired = (req, res, next) => {
 };
 
 export const registerStudents = async (req, res) => {
-    const { regNo, studentEmail, studentName, deptId, courseId, password, nationalId, phoneNo, image} = req.body;
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    const { regNo, studentEmail, studentName, deptId, courseId, nationalId, phoneNo, image} = req.body;
+    
+    const hashedPassword = bcrypt.hashSync(nationalId.toString() , 10);
     const regDate = new Date().toLocaleDateString();
 
     try {

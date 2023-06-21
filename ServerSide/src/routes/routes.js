@@ -13,13 +13,13 @@ const routes = (app) => {
   
 
     // open routes
-    app.route('register/lecturers')
+    app.route('/register/lecturers')
         .post(registerLecturers);
 
-    app.route('register/students')
+    app.route('/register/students')
         .post(registerStudents);
 
-    app.route('login/student')
+    app.route('/login/student')
         .post(studentLogin);
 
 

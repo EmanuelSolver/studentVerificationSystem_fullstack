@@ -2,9 +2,12 @@ import express from 'express';
 import config from './src/db/config.js';
 import routes from './src/routes/routes.js';
 import jwt from 'jsonwebtoken';
+import cors from 'cors'
 
 
 const app = express();
+app.use(cors())
+
 //middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
