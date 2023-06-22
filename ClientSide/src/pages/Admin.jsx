@@ -3,12 +3,15 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import '../stylingFiles/StudentRegister.css';
 import '../stylingFiles/StudentLogin.css';
-
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
+  const navigate = useNavigate()
+
  const schema = yup.object().shape({
     password: yup.string().required(),
-    userName: yup.string().required('Enter userName'),
+    email: yup.string().required('Enter userName'),
  });
 
  const { register, handleSubmit, formState: { errors } } = useForm({
@@ -18,6 +21,20 @@ const AdminLogin = () => {
 
   const dataToServer = (data) => {
          console.log(data);
+         axios.post("http://localhost:8083/login/admin", data)
+         .then(({data}) =>{
+           if(data.token){
+             // dispatchEvent({type: "LOGIN_SUCCESS", payload: data})
+             alert("Login successful")
+             //once you successfully login, redirect to student portal
+             navigate('/admindashboard')
+           }
+        
+           })
+           .catch(({response}) =>{
+
+           console.log(response.data.error)
+           })
   };
 
   return (
@@ -34,9 +51,9 @@ const AdminLogin = () => {
         </div>
         
         <div>
-          <label htmlFor="regNo">Enter UserName:</label> <br />
-          <input type="text" id="regNo" {...register("userName")}/>
-          <p>{errors.regNo?.message}</p> 
+          <label htmlFor="email">Enter Email:</label> <br />
+          <input type="text" id="email" {...register("email")}/>
+          <p>{errors.email?.message}</p> 
         </div>
 
         <div>

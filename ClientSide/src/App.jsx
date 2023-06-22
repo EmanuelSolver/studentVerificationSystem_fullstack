@@ -8,6 +8,9 @@ import Notfound from './pages/Notfound';
 import Header from './components/Header';
 import SignUpForm from './pages/StudentRegister';
 import Footer from './components/Footer';
+import StudentPortal from './pages/StudentPortal';
+import Dashboard from './pages/Dashboard';
+import StaffPortal from './pages/StaffPortal';
 
 function App() {
 
@@ -28,6 +31,12 @@ function App() {
           <Route path="/LectureLogin" element={<LectureLogin />} />
             {/* departments page */}
           <Route path="/departments" element={<Departments />} />
+           {/* student portal */}
+           <Route path="/studentportal" element={<StudentPortal />} />
+           {/* staff portal */}
+           <Route path="/staffportal" element={<StaffPortal />} />
+           {/* Admin dashboard */}
+           <Route path="/admindashboard" element={<Dashboard />} />
           {/* NotFound page */}
           <Route path="*" element={<Notfound />} />
         </Routes>

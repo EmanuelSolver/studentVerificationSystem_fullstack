@@ -4,8 +4,17 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import '../stylingFiles/StudentRegister.css';
 import '../stylingFiles/StudentLogin.css';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { Context } from "../context/usercontext/context";
 
 const LoginForm = () => {
+
+  const { dispatch } = useContext(Context);
+  
+  //help us navigate to student portal
+  const navigate = useNavigate()
+
     const schema = yup.object().shape({
         password: yup.string().required(),
         regNo: yup.string().required('Enter your Registration No'),
@@ -20,9 +29,17 @@ const LoginForm = () => {
         console.log(data);
 
         axios.post("http://localhost:8083/login/student", data)
-            .then((response) =>{
-              response.data.message && alert(response.data.message)
-              console.log(response)
+            .then(({data}) =>{
+              
+              if(data.token){
+                //make context aware of logged in user
+                dispatch({type: "LOGIN_SUCCESS", payload: data})
+
+                alert("Login successful")
+                //once you successfully login, redirect to student portal
+                navigate('/studentportal')
+              }
+           
               })
               .catch(({response}) =>{
 

@@ -92,6 +92,44 @@ export const registerLecturers = async (req, res) => {
 
 };
 
+
+export const registerAdmin = async (req, res) => {
+    const { email, nationalId, userName} = req.body;
+    const hashedPassword = bcrypt.hashSync(nationalId.toString(), 10);
+    const regDate = new Date().toLocaleDateString();
+
+    try {
+        let pool = await sql.connect(config.sql);
+        const result = await pool.request()
+            .input('email', sql.VarChar, email)
+            .query('SELECT * FROM AdminsData WHERE Email = @email');
+        
+            const user = result.recordset[0];
+        if (user) {
+            res.status(409).json({ error: 'Admin already exists' });
+        } else {
+            await pool.request()
+                .input('userName', sql.VarChar, userName)
+                .input('mail', sql.VarChar, email)
+                .input('hashedpassword', sql.VarChar, hashedPassword)
+                .input('nationalId', sql.Int, nationalId)
+                .input('regDate', sql.VarChar, regDate)
+
+                .query('INSERT INTO AdminsData (UserName, Email, NationalID, Password, RegDate) VALUES (@userName, @mail, @nationalId,  @hashedPassword, @regDate)');
+            res.status(200).send({ message: 'Registered successfully' });
+        }
+
+    } catch (error) {
+
+        res.status(500).json({ error: error.message });
+    } finally {
+
+        sql.close();
+    }
+
+};
+
+
 export const studentLogin = async (req, res) => {
     const { regNo, password } = req.body;
     let pool = await sql.connect(config.sql);
@@ -102,13 +140,58 @@ export const studentLogin = async (req, res) => {
 
     const user = result.recordset[0];
     if (!user) {
-        res.status(401).json({ error: 'Authentication failed. Wrong credentials.' });
+        res.status(401).json({ error: 'Are you a Registered student' });
     } else {
         if (!bcrypt.compareSync(password, user.Password)) {
             res.status(401).json({ error: 'Authentication failed. Wrong credentials.' });
         } else {
             const token = `JWT ${jwt.sign({ username: user.StudentName, email: user.StudentMail }, config.jwt_secret)}`;
             res.status(200).json({ email: user.StudentMail, username: user.StudentName, id: user.RegNo, token: token });
+        }
+    }
+
+};
+
+
+export const staffLogin = async (req, res) => {
+    const { email, password } = req.body;
+    let pool = await sql.connect(config.sql);
+
+    const result = await pool.request()
+        .input('email', sql.VarChar, email)
+        .query('SELECT * FROM LecturersData WHERE LecMail = @email');
+
+    const user = result.recordset[0];
+    if (!user) {
+        res.status(401).json({ error: 'Not Found' });
+    } else {
+        if (!bcrypt.compareSync(password, user.Password)) {
+            res.status(401).json({ error: 'Wrong credentials.' });
+        } else {
+            const token = `JWT ${jwt.sign({ username: user.LecName, email: user.LecMail }, config.jwt_secret)}`;
+            res.status(200).json({ email: user.Email, username: user.LecName, id: user.LecID, token: token });
+        }
+    }
+
+};
+
+export const adminLogin = async (req, res) => {
+    const { email, password } = req.body;
+    let pool = await sql.connect(config.sql);
+
+    const result = await pool.request()
+        .input('email', sql.VarChar, email)
+        .query('SELECT * FROM AdminsData WHERE Email = @email');
+
+    const user = result.recordset[0];
+    if (!user) {
+        res.status(401).json({ error: 'Not Found' });
+    } else {
+        if (!bcrypt.compareSync(password, user.Password)) {
+            res.status(401).json({ error: 'Wrong credentials.' });
+        } else {
+            const token = `JWT ${jwt.sign({ username: user.UserName, email: user.Email }, config.jwt_secret)}`;
+            res.status(200).json({ email: user.Email, username: user.UserName, id: user.id, token: token });
         }
     }
 

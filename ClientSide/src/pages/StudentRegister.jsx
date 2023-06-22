@@ -5,12 +5,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios'
 import '../stylingFiles/StudentRegister.css';
 import '../stylingFiles/StudentLogin.css';
-
+import { useNavigate } from 'react-router-dom'
 
 const departments = ['Arts & Sociology', 'Business & Education', 'Construction & Engineering', 'Pure & Applied Sciences'];
 const courses = ['Fashion Design', 'Film Production','Economics & Statistics', 'Business commerce', 'Mechanical Engineering','Electrical Engineering', 'Forensics', 'Mathematics & Computer Science']; // Replace with your course options
 
 const SignUpForm = () => {
+  const navigate = useNavigate()
 
   //create a schema to validate input fields before submission
  const schema = yup.object().shape({
@@ -36,15 +37,16 @@ const SignUpForm = () => {
   const dataToServer = (data) => {
       console.log(data);
 
-      // axios.post("http://localhost:8083/register/students", data)
-      //         .then((response) =>{
-      //           response.data.message && alert(response.data.message)
-      //           console.log(response)
-      // })
-      // .catch(({response}) =>{
+      axios.post("http://localhost:8083/register/students", data)
+              .then((response) =>{
+                response.data.message && alert(response.data.message)
+                console.log(response)
+                navigate("/studentLogin")
+      })
+      .catch(({response}) =>{
 
-      //   console.log(response.data.error)
-      // })
+        console.log(response.data.error)
+      })
   };
 
   // select image from local machine as profile picture
@@ -54,13 +56,13 @@ const SignUpForm = () => {
   const handleImageChange = (e) => {
 
     const file = e.target.files[0];
+    
     setSelectedImage(URL.createObjectURL(file));
 
-    setUploadImage("studentImages/" + file.name)
+    setUploadImage("studentImages/" + file.name);
     
   };
 
-console.log(uploadImage);
 
   return (
     <>  

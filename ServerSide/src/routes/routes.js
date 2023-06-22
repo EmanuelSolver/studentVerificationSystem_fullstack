@@ -1,5 +1,5 @@
 import { getAll, removeStudent, updatePassword, getInfo } from '../controllers/activityController.js';
-import { studentLogin, registerLecturers,  registerStudents, loginRequired } from '../controllers/userControllers.js';
+import { studentLogin, registerLecturers,  registerStudents, loginRequired, adminLogin, staffLogin, registerAdmin } from '../controllers/userControllers.js';
 
 const routes = (app) => {
     //Restricted routes, you have to login first
@@ -22,6 +22,14 @@ const routes = (app) => {
     app.route('/login/student')
         .post(studentLogin);
 
+    app.route('/login/staff')
+        .post(staffLogin);
 
+    app.route('/login/admin')
+        .post(adminLogin);
+
+        //an admin can be registered only by another admin
+    app.route('/admin')
+        .post(loginRequired, registerAdmin)
 };
 export default routes;
