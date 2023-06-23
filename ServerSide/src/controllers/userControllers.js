@@ -146,7 +146,7 @@ export const studentLogin = async (req, res) => {
             res.status(401).json({ error: 'Authentication failed. Wrong credentials.' });
         } else {
             const token = `JWT ${jwt.sign({ username: user.StudentName, email: user.StudentMail }, config.jwt_secret)}`;
-            res.status(200).json({ email: user.StudentMail, username: user.StudentName, id: user.RegNo, token: token });
+            res.status(200).json({ email: user.StudentMail, username: user.StudentName, id: user.RegNo, phone: user.PhoneNumber, nationalId: user.NationalID, token: token });
         }
     }
 

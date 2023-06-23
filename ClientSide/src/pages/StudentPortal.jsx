@@ -9,6 +9,7 @@ function StudentPortal() {
   return (
     <div className='portal'>
       <br /><br /> 
+      
       <Sidenav />
 
       <Mainnav />

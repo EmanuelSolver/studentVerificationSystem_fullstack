@@ -6,16 +6,52 @@ function Profile() {
     const { user } = useContext(Context)
   return (
     <div className='profile'>
+
       <div className="userAvator">
-        
-        <img src="honeycomb2.jpg" alt="not found" className='user-image'/>
+      <img src="honeycomb2.jpg" alt="not found" className='user-image'/>
+
       </div>
-      <div className="user-details">
-        <h2>UserName: {user.username}</h2>
-        <h2>Registration No:{user.id}</h2>
-        <h2>Student Email:{user.email} </h2>
+      
+        <table className="table">
+        <thead>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr >
+            <th >Student</th>
+            <th>Credentials</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            <td>National ID</td>
+            <td>{user.nationalId}</td>
+          </tr>
+          <tr>
+            <td>Student Name</td>
+            <td>{user.username}</td>
+          </tr>
+          <tr>
+            <td>Student Email</td>
+            <td>{user.email}</td>
+          </tr>
+         
+          <tr>
+            <td>Registration No</td>
+            <td>{user.id}</td>
+          </tr>
+          <tr>
+            <td>Mobile Number</td>
+            <td>{user.phone}</td>
+          </tr>
+          
+        </tbody>
+      </table>
+       
       </div>
-    </div>
+    
   )
 }
 

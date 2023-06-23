@@ -72,8 +72,9 @@
       text-align: left;
       font-weight: 700;
       position: relative;
-      left: -150%;
+      left: -230%;
       top: 100%;
+      color: aliceblue;
     }
   
     .nav-links:hover {

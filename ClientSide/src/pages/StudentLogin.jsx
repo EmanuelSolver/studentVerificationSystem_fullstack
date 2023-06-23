@@ -26,7 +26,6 @@ const LoginForm = () => {
     });
 
     const dataToServer = (data) => {
-        console.log(data);
 
         axios.post("http://localhost:8083/login/student", data)
             .then(({data}) =>{

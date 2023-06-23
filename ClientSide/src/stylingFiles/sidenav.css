@@ -4,8 +4,9 @@
     flex-direction: column;
     height: 100vh;
     border-right: 1px solid #bbb9b9;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.7);
     line-height: 3;
+    z-index: 1;
 }
 .sidenav-title{
     font-size: 1.5rem;
