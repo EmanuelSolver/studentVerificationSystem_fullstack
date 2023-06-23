@@ -1,52 +1,53 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom'
 import '../stylingFiles/Header.css';
+import { useContext } from 'react';
+import { Context } from '../context/usercontext/context';
 
 //Header icons 
 import { RiHome4Fill } from "react-icons/ri";
-import { MdAdminPanelSettings } from "react-icons/md"
 import { MdArticle } from "react-icons/md";
 import { ImNewspaper } from "react-icons/im";
 import { VscSymbolEnumMember } from "react-icons/vsc"
 import { GiArchiveRegister } from "react-icons/gi"
 import { MdSchool } from "react-icons/md"
-
+import { RiLogoutCircleLine } from "react-icons/ri"
 
 const Header = () => {
-  const [click, setClick] = useState(false);
+  const { user, dispatch } = useContext(Context)
 
-  const handleClick = () => setClick(!click);
-  
-  const closeMobileMenu = () => setClick(false);
+  const handleLogout = () =>{
 
+    dispatch({ type: "LOGOUT"})
+  }
     return(
         <>
           <nav className='navbar'>
-            <div className='navbar-container'>
-              <Link to="/" className='navbar-logo'>
-                OurCollege <MdSchool />
-              </Link>
-
-              <div className="menu-icon" onClick={handleClick}>
-          
+              <div className='navbar-container'>
+                <Link to="/" className='navbar-logo'>
+                  OurCollege <MdSchool />
+                </Link>
+            
               </div>
 
-              <ul className={click ? 'nav-menu active' : 'nav-menu'}>
+              <ul >
                 <li className='nav-item'>
-                  <Link to="/" className='nav-links' onClick={closeMobileMenu}><RiHome4Fill /> Home</Link>
-                  <Link to="/admin" className='nav-links' onClick={closeMobileMenu}><MdAdminPanelSettings/> Admin</Link>
-                  <Link to="/lectureLogin" className='nav-links' onClick={closeMobileMenu}><VscSymbolEnumMember/>Staff</Link>
-                  <Link to="/studentLogin" className='nav-links' onClick={closeMobileMenu}><ImNewspaper /> Portal</Link>
-                  <Link to="./studentregister" className='nav-links' onClick={closeMobileMenu}><GiArchiveRegister /> Register</Link>
-                  <Link to="/departments" className='nav-links' onClick={closeMobileMenu}><MdArticle /> Departments</Link>
-
+                  <Link to="/" className='nav-links' ><RiHome4Fill /> Home</Link>
+                  <Link to="/lectureLogin" className='nav-links' ><VscSymbolEnumMember/> Staff</Link>
+                  <Link to="/studentLogin" className='nav-links' ><ImNewspaper /> Students </Link>
+                  <Link to="/studentRegister" className='nav-links'><GiArchiveRegister /> Register</Link>
+                {
+                  user && (
+                    <>
+                      <Link to="/studentPortal" className='nav-links' ><ImNewspaper /> Portal</Link>
+                      <Link to="/studentLogin" className='nav-links' onClick={handleLogout} style={{color:"brown"}}><RiLogoutCircleLine /> Logout</Link>
+                    </>
+                  )
+                }
+                <Link to="/departments" className='nav-links' ><MdArticle /> Departments</Link>
                 </li>
               </ul>
-               
-            </div>
           </nav>
-         
-          
+           
         </>
     )
 };

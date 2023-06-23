@@ -11,8 +11,11 @@ import Footer from './components/Footer';
 import StudentPortal from './pages/StudentPortal';
 import Dashboard from './pages/Dashboard';
 import StaffPortal from './pages/StaffPortal';
+import { useContext } from 'react';
+import { Context } from './context/usercontext/context';
 
 function App() {
+  const { user } = useContext(Context)
 
   return (
     <>
@@ -22,21 +25,21 @@ function App() {
           {/* homepage/running page */}
           <Route path='/' element={<Home />} />
           {/* student login page */}
-          <Route path="/studentlogin" element={<LoginForm  />} />
+          <Route path="/studentLogin" element={ <LoginForm  />} />
           {/* Admin page */}
           <Route path="/admin" element={<AdminLogin />} />
            {/* student Register page */}
-           <Route path="/studentregister" element={<SignUpForm  />} />
+           <Route path="/studentRegister" element={<SignUpForm  />} />
            {/* Lecture page */}
           <Route path="/LectureLogin" element={<LectureLogin />} />
             {/* departments page */}
           <Route path="/departments" element={<Departments />} />
-           {/* student portal */}
-           <Route path="/studentportal" element={<StudentPortal />} />
+           {/* student portal -- if there is a logged in user, student in student portal else redirect to login page*/}
+           <Route path="/studentPortal" element={ user ? <StudentPortal /> : < LoginForm />} />
            {/* staff portal */}
-           <Route path="/staffportal" element={<StaffPortal />} />
+           <Route path="/staffPortal" element={<StaffPortal />} />
            {/* Admin dashboard */}
-           <Route path="/admindashboard" element={<Dashboard />} />
+           <Route path="/adminDashboard" element={<Dashboard />} />
           {/* NotFound page */}
           <Route path="*" element={<Notfound />} />
         </Routes>

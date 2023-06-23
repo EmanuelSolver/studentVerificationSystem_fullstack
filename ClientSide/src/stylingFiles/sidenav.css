@@ -1,0 +1,27 @@
+.sidenav{
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    border-right: 1px solid #bbb9b9;
+    background-color: rgba(255, 255, 255, 0.5);
+    line-height: 3;
+}
+.sidenav-title{
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: rgb(46, 46, 40);
+    font-weight: 500;
+}
+
+.sidenav-item{
+    padding: 0.25rem;
+    gap: 0.5rem;
+    color: rgb(47, 47, 117);
+}
+
+.sidenav-item:hover, .sidenav-title:hover{
+    background-color: rgb(43, 61, 55);
+    color: #fff;
+    cursor: pointer;
+}

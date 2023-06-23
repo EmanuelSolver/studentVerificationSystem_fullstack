@@ -25,17 +25,15 @@ const LoginForm = () => {
       resolver: yupResolver(schema),
     });
 
-      const dataToServer = (data) => {
+    const dataToServer = (data) => {
         console.log(data);
 
         axios.post("http://localhost:8083/login/student", data)
             .then(({data}) =>{
-              
+
               if(data.token){
                 //make context aware of logged in user
                 dispatch({type: "LOGIN_SUCCESS", payload: data})
-
-                alert("Login successful")
                 //once you successfully login, redirect to student portal
                 navigate('/studentportal')
               }
@@ -43,7 +41,7 @@ const LoginForm = () => {
               })
               .catch(({response}) =>{
 
-              console.log(response.data.error)
+                alert(response.data.error)
               })
       };
 

@@ -62,12 +62,12 @@
       }
     .content{
       display: block;
-      margin-left: 25%;
+    
     }
 
   .image {
     margin-left: 1rem;
-    width: 100%;  
+    width: 80%;  
   }
 
   .heading { 

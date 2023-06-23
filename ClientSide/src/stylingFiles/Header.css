@@ -11,7 +11,7 @@
     font-size: 1.2rem;
     
     top: 0;
-    z-index: 1; 
+   
   }
   
   .navbar-container {
@@ -66,16 +66,14 @@
   }
   
   @media screen and (max-width: 768px) {
-   .nav-menu{
-    position: absolute;
-    left: -23%;
-    top: 75%;
-   }
+ 
     .nav-links {
       display: block;
       text-align: left;
       font-weight: 700;
-      width: 55%;
+      position: relative;
+      left: -150%;
+      top: 100%;
     }
   
     .nav-links:hover {

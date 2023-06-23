@@ -4,7 +4,9 @@
     left: 0;
     width: 100%;
     background-color: rgba(8, 8, 8, 0.4);
-    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .footer h3{
     color: rgb(26, 194, 216);
