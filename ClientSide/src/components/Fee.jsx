@@ -9,11 +9,12 @@ function Fee() {
     const [fee, setFee] = useState([])
 
     const getData = async () => {
-        const res = await axios.get(`${apiDomain}/activity`,{
+        const res = await axios.get(`${apiDomain}/fee`,{
             headers: { 'Authorization': `${user.token}`}
         })
         setFee(res.data)
     }
+    
     useEffect(() =>{
 
         getData()

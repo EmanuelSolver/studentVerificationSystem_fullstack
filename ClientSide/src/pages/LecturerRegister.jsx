@@ -1,27 +1,41 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import '../stylingfiles/StudentRegister.css';
+import axios from 'axios'
+import { apiDomain } from "../utils/utils";
+import '../stylingFiles/StudentRegister.css';
 
 
 const departments = ['Arts & Sociology', 'Business & Education', 'Construction & Engineering', 'Pure & Applied Sciences'];
 
 const SignUpForm = () => {
  const schema = yup.object().shape({
-    userName: yup.string().required('Enter your Name'),
-    email: yup.string().email().required(),
-    regNo: yup.string().required('Enter Registration No'),
-    idno: yup.number().required('Enter National No'),
-    department: yup.string().required("Select department"),
+    lecName: yup.string().required('Enter your Name'),
+    lecMail: yup.string().email().required('Email Email'),
+    phoneNo: yup.string().matches(
+      /^\+(?:[0-9]){10,}$/,
+      'Add International phone No'
+    ),
+    nationalId: yup.number().required('Enter National No'),
+    deptId: yup.string().required("Select department"),
  });
 
- const { register, handleSubmit, formState: { errors } } = useForm({
+ const { register, handleSubmit, formState: { errors }, reset } = useForm({
 
    resolver: yupResolver(schema),
  });
 
   const dataToServer = (data) => {
-         console.log(data);
+
+        axios.post(`${apiDomain}/register/lecturers`, data)
+         .then((response) =>{
+              response.data.message && alert(response.data.message)
+              reset()
+          })
+          .catch(({response}) =>{
+
+            alert(response.data.error)
+          })
   };
 
 
@@ -34,44 +48,43 @@ const SignUpForm = () => {
 
         <div>
           <label htmlFor="name">Lecturer Name:</label> <br />
-          <input type="text" id="name" placeholder="Your username" {...register("userName")}/>
-          <p>{errors.userName?.message}</p>
+          <input type="text" id="name" placeholder="Your username" {...register("lecName")}/>
+          <p>{errors.lecName?.message}</p>
         </div>
 
         <div>
           <label htmlFor="email">Lecturer Mail:</label> <br />
-            <input type="email" id="email" placeholder='e.g. yourname@example.com' {...register("email")}/>
-            <p>{errors.invalidEmail?.message}</p>
+            <input type="email" id="email" placeholder='e.g. yourname@example.com' {...register("lecMail")}/>
+            <p>{errors.lecMail?.message}</p>
         </div> 
 
 
         <div>
           <label htmlFor="phone">Phone Number:</label> <br />
-            <input type="tel" id="phone" placeholder='e.g. +21134567891' {...register("phone")}/>
-            <p>{errors.phone?.message}</p>
+            <input type="tel" id="phone" placeholder='e.g. +21134567891' {...register("phoneNo")}/>
+            <p>{errors.phoneNo?.message}</p>
         </div> 
 
         <div>
           <label htmlFor="idno">National ID:</label> <br />
-            <input type="number" id="idno" {...register("idno")}/>
-            <p>{errors.idno?.message}</p>
+            <input type="text" id="idno" {...register("nationalId")}/>
+            <p>{errors.nationalId?.message}</p>
         </div> 
 
         <div>
           <label htmlFor="name">Department:</label>
-            <select name="department" id="department" {...register("department")}>
+            <select name="department" id="department" {...register("deptId")}>
                 <option > - select - </option>
                 {departments.map((dept, index) => (
-                    <option key={dept} value={index}> {dept} </option>
+                    <option key={dept} value={index + 1}> {dept} </option>
                 ))}
             </select>
           
-            <p>{errors.dapartment?.message}</p>
+            <p>{errors.deptId?.message}</p>
         </div>
 
         <button type="submit">Submit</button>
-    
-      
+       
     </form>
   );
 };

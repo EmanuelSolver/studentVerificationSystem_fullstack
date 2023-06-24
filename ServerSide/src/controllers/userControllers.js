@@ -3,7 +3,6 @@ import config from '../db/config.js';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 
-
 export const loginRequired = (req, res, next) => {
     if (req.user) {
         next();
@@ -55,14 +54,14 @@ export const registerStudents = async (req, res) => {
 
 
 export const registerLecturers = async (req, res) => {
-    const { lecName, phoneNo, nationalId, lecMail, password, deptId} = req.body;
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    const { lecName, phoneNo, nationalId, lecMail, deptId} = req.body;
+    const hashedPassword = bcrypt.hashSync(nationalId.toString() , 10);
     const regDate = new Date().toLocaleDateString();
 
     try {
         let pool = await sql.connect(config.sql);
         const result = await pool.request()
-            .input('nationalId', sql.VarChar, nationalId)
+            .input('nationalId', sql.Int, nationalId)
             .query('SELECT * FROM LecturersData WHERE NationalID = @nationalId');
         
             const user = result.recordset[0];

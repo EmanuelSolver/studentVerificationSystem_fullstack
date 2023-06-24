@@ -5,13 +5,16 @@ import '../stylingFiles/StudentRegister.css';
 import '../stylingFiles/StudentLogin.css';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { useContext } from 'react'
+import { Context } from "../context/usercontext/context";
 
 const AdminLogin = () => {
   const navigate = useNavigate()
+  const { dispatch } = useContext(Context);
 
  const schema = yup.object().shape({
     password: yup.string().required(),
-    email: yup.string().required('Enter userName'),
+    email: yup.string().required('Enter admin email'),
  });
 
  const { register, handleSubmit, formState: { errors } } = useForm({
@@ -24,7 +27,7 @@ const AdminLogin = () => {
          axios.post("http://localhost:8083/login/admin", data)
          .then(({data}) =>{
            if(data.token){
-             // dispatchEvent({type: "LOGIN_SUCCESS", payload: data})
+             dispatch({type: "LOGIN_SUCCESS", payload: data})
              alert("Login successful")
              //once you successfully login, redirect to student portal
              navigate('/admindashboard')

@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home';
 import LoginForm from './pages/StudentLogin';
-import LectureLogin from './pages/LectureLogin';
+import LecturerLogin from './pages/LecturerLogin';
 import Departments from './pages/Departments';
 import AdminLogin from './pages/Admin';
 import Notfound from './pages/Notfound';
@@ -31,7 +31,7 @@ function App() {
            {/* student Register page */}
            <Route path="/studentRegister" element={<SignUpForm  />} />
            {/* Lecture page */}
-          <Route path="/LectureLogin" element={<LectureLogin />} />
+          <Route path="/LectureLogin" element={<LecturerLogin />} />
             {/* departments page */}
           <Route path="/departments" element={<Departments />} />
            {/* student portal -- if there is a logged in user, student in student portal else redirect to login page*/}
