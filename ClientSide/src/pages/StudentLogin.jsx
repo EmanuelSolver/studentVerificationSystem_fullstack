@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { Context } from "../context/usercontext/context";
+import { apiDomain }from '../utils/utils';
 
 const LoginForm = () => {
 
@@ -27,7 +28,7 @@ const LoginForm = () => {
 
     const dataToServer = (data) => {
 
-        axios.post("http://localhost:8083/login/student", data)
+        axios.post(`${apiDomain}/login/student`, data)
             .then(({data}) =>{
 
               if(data.token){

@@ -135,7 +135,10 @@ export const studentLogin = async (req, res) => {
 
     const result = await pool.request()
         .input('regNo', sql.VarChar, regNo)
-        .query('SELECT * FROM StudentsData WHERE RegNo = @regNo');
+        .query(`SELECT s.RegNo, s.StudentName, s.Password, s.StudentMail, s.PhoneNumber, s.NationalID, s.ProfileImage, d.DeptName, c.CourseName FROM StudentsData s 
+            JOIN Departments d ON s.DeptID = d.DeptID
+            JOIN Courses c ON s.CourseID = c.CourseID
+            WHERE RegNo = @regNo`);
 
     const user = result.recordset[0];
     if (!user) {
@@ -145,7 +148,7 @@ export const studentLogin = async (req, res) => {
             res.status(401).json({ error: 'Authentication failed. Wrong credentials.' });
         } else {
             const token = `JWT ${jwt.sign({ username: user.StudentName, email: user.StudentMail }, config.jwt_secret)}`;
-            res.status(200).json({ email: user.StudentMail, username: user.StudentName, id: user.RegNo, phone: user.PhoneNumber, nationalId: user.NationalID, token: token });
+            res.status(200).json({ email: user.StudentMail, username: user.StudentName, id: user.RegNo, phone: user.PhoneNumber, nationalId: user.NationalID, department: user.DeptName, course: user.CourseName, token: token });
         }
     }
 
@@ -158,7 +161,7 @@ export const staffLogin = async (req, res) => {
 
     const result = await pool.request()
         .input('email', sql.VarChar, email)
-        .query('SELECT * FROM LecturersData WHERE LecMail = @email');
+        .query("SELECT L.LecName, L.PhoneNumber, L.LecMail, L.Password, d.DeptName FROM LecturersData L JOIN Departments d ON L.DeptID = d.DeptID WHERE L.LecMail = @email");
 
     const user = result.recordset[0];
     if (!user) {
@@ -168,7 +171,7 @@ export const staffLogin = async (req, res) => {
             res.status(401).json({ error: 'Wrong credentials.' });
         } else {
             const token = `JWT ${jwt.sign({ username: user.LecName, email: user.LecMail }, config.jwt_secret)}`;
-            res.status(200).json({ email: user.Email, username: user.LecName, id: user.LecID, token: token });
+            res.status(200).json({ email: user.LecMail, username: user.LecName, nationalId: user.NationalID, department: user.DeptName, token: token });
         }
     }
 

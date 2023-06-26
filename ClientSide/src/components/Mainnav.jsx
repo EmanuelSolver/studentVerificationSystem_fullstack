@@ -1,5 +1,5 @@
 import '../stylingFiles/mainnav.css'
-import { Context } from '../context/portalcontext/context'
+import { Context } from '../context/studentContext/context'
 import { useContext } from 'react'
 import Profile from './Profile'
 import Fee from './Fee'

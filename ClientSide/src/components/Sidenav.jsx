@@ -3,7 +3,7 @@ import { CgProfile } from 'react-icons/cg'
 import { FaBookReader } from 'react-icons/fa'
 import { FaMoneyCheckAlt } from 'react-icons/fa'
 import { GiProgression } from 'react-icons/gi'
-import { Context } from '../context/portalcontext/context'
+import { Context } from '../context/studentContext/context'
 import { useContext } from 'react'
 
 export function Sidenav() {

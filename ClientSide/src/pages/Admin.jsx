@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useContext } from 'react'
 import { Context } from "../context/usercontext/context";
+import { apiDomain } from '../utils/utils';
 
 const AdminLogin = () => {
   const navigate = useNavigate()
@@ -24,11 +25,10 @@ const AdminLogin = () => {
 
   const dataToServer = (data) => {
          console.log(data);
-         axios.post("http://localhost:8083/login/admin", data)
+         axios.post(`${ apiDomain }/login/admin`, data)
          .then(({data}) =>{
            if(data.token){
              dispatch({type: "LOGIN_SUCCESS", payload: data})
-             alert("Login successful")
              //once you successfully login, redirect to student portal
              navigate('/admindashboard')
            }
@@ -36,7 +36,7 @@ const AdminLogin = () => {
            })
            .catch(({response}) =>{
 
-           console.log(response.data.error)
+           alert(response.data.error)
            })
   };
 

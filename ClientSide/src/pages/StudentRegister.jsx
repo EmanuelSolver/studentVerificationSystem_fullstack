@@ -6,6 +6,7 @@ import axios from 'axios'
 import '../stylingFiles/StudentRegister.css';
 import '../stylingFiles/StudentLogin.css';
 import { useNavigate } from 'react-router-dom'
+import { apiDomain } from '../utils/utils'
 
 const departments = ['Arts & Sociology', 'Business & Education', 'Construction & Engineering', 'Pure & Applied Sciences'];
 const courses = ['Fashion Design', 'Film Production','Economics & Statistics', 'Business commerce', 'Mechanical Engineering','Electrical Engineering', 'Forensics', 'Mathematics & Computer Science']; // Replace with your course options
@@ -37,7 +38,7 @@ const SignUpForm = () => {
   const dataToServer = (data) => {
       console.log(data);
 
-      axios.post("http://localhost:8083/register/students", data)
+      axios.post(`${ apiDomain }/register/students`, data)
               .then((response) =>{
                 response.data.message && alert(response.data.message)
                 console.log(response)

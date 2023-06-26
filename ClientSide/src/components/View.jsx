@@ -120,21 +120,38 @@ export function FeeStatement() {
         getData()
     }, [])
 
-    console.log(fee)
   return (
     <div>
+        <table className='table'>
+            <thead>
+                <th>Student Name</th>
+                <th>Registration No</th>
+                <th>Fee Paid </th>
+                <th>Fee Balance</th>
+            </thead>
+            <tbody>
+
         {
             fee && fee.map((item, index) => {
                 return (
                     <>
-                        <div key={index}>{ item.RegNo } { item.StudentName }</div> 
-                        <div></div>
+                        <tr  key={index}>
+                            <td>{item.StudentName}</td>
+                            <td>{ item.RegNo }</td>
+                            <td>{ item.FeePaid }</td>
+                            <td>{ item.Arrears }</td>
+
+                        </tr>
+                    
                     </>
                     
                 )
                 
               })
         }
+
+            </tbody>
+        </table>
       
     </div>
   )

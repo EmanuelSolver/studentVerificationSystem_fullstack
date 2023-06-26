@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { Students, Lecturers, FeeStatement } from './View'
 import AddAdmin from './AddAdmin'
 import SignUpForm from '../pages/LecturerRegister'
-import '../stylingFiles/mainnav.css'
+
 
 export function AdminMainnav() {
     const { admin } = useContext(Context)

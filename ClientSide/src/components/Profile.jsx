@@ -4,7 +4,8 @@ import { Context } from '../context/usercontext/context'
 
 function Profile() {
     const { user } = useContext(Context)
-  return (
+    
+    return (
     <div className='profile'>
 
       <div className="userAvator">
@@ -45,6 +46,14 @@ function Profile() {
           <tr>
             <td>Mobile Number</td>
             <td>{user.phone}</td>
+          </tr>
+          <tr>
+            <td>Department</td>
+            <td>{user.department}</td>
+          </tr>
+          <tr>
+            <td>Course</td>
+            <td>{user.course}</td>
           </tr>
           
         </tbody>

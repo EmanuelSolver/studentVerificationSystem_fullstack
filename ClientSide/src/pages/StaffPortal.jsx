@@ -1,8 +1,12 @@
+import StaffSidenav from '../components/StaffSidenav';
+import { StaffMainnav } from '../components/StaffMainnav';
 
 function StaffPortal() {
   return (
-    <div>
-      <h1>Staff portal</h1>
+    <div className='portal'>
+      <StaffSidenav />
+
+      <StaffMainnav />
     </div>
   )
 }
