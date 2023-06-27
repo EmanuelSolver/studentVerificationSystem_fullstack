@@ -1,40 +1,29 @@
-import '../stylingFiles/fee.css'
-import  { useEffect, useContext, useState } from 'react'
+
+import  { useContext } from 'react'
 import { Context } from '../context/usercontext/context'
-import axios from 'axios'
-import { apiDomain } from '../utils/utils'
+
 
 function Fee() {
     const { user } = useContext(Context)
-    const [fee, setFee] = useState([])
-
-    const getData = async () => {
-        const res = await axios.get(`${apiDomain}/fee`,{
-            headers: { 'Authorization': `${user.token}`}
-        })
-        setFee(res.data)
-    }
     
-    useEffect(() =>{
-
-        getData()
-    }, [])
-
-    console.log(fee)
   return (
     <div>
-        {
-            fee && fee.map((item, index) => {
-                return (
-                    <>
-                        <div key={index}>{ item.RegNo } { item.StudentName }</div> 
-                        <div></div>
-                    </>
-                    
-                )
+        <table className='table'>
+            <thead>
+                <tr>
+                    <th>Fee</th>
+                    <th>Statement</th>
+                </tr>
                 
-              })
-        }
+            </thead>
+            <tbody>
+                <tr><td>Student_Name</td><td>{user.username}</td></tr>
+                <tr><td>Registration_Number</td> <td>{user.id}</td></tr>
+                <tr><td>Payable Fee</td> <td> {user.PayableFee}.00</td></tr>
+                <tr><td>Paid Fee</td> <td> {user.FeePaid}.00</td></tr>
+                <tr><td>Fee Balance</td> <td> {user.balance}.00</td></tr>
+            </tbody>
+        </table>
       
     </div>
   )

@@ -3,19 +3,19 @@ const Reducer = (state, action) => {
     switch (action.type) {
         case "PROFILE":
             return{
-                ui: action.payload,
+                student: action.payload,
             }
         case "FEE":
             return{
-                ui: action.payload,
+                student: action.payload,
             }
         case "BOOK_EXAM":
             return{
-                ui: action.payload,
+                student: action.payload,
             }
         case "PROGRESS":
             return{
-                ui: action.payload,
+                student: action.payload,
             }
         default:
             return state;

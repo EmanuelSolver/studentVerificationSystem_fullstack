@@ -3,6 +3,7 @@ import config from '../db/config.js';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 
+
 export const loginRequired = (req, res, next) => {
     if (req.user) {
         next();
@@ -12,6 +13,7 @@ export const loginRequired = (req, res, next) => {
 };
 
 export const registerStudents = async (req, res) => {
+    
     const { regNo, studentEmail, studentName, deptId, courseId, nationalId, phoneNo, image} = req.body;
     
     const hashedPassword = bcrypt.hashSync(nationalId.toString() , 10);
@@ -27,6 +29,16 @@ export const registerStudents = async (req, res) => {
         if (user) {
             res.status(409).json({ error: 'Student already exists' });
         } else {
+            //every time a student is registered, mimic fee payment and randomize fee paid by the student
+            const min1 = 10000
+            const max1 = 50000
+            const min2 = 35000
+            const max2 = 70000
+            //generate random numbers
+            const feePaid = Math.floor(Math.random() * (max1 - min1) + min1);
+            const payableFee = Math.floor(Math.random() * (max2 - min2) + min2);
+            const balance = payableFee - feePaid;
+            
             await pool.request()
                 .input('regNo', sql.VarChar, regNo)
                 .input('studentName', sql.VarChar, studentName)
@@ -39,7 +51,17 @@ export const registerStudents = async (req, res) => {
                 .input('phoneNo', sql.VarChar, phoneNo)
                 .input('regDate', sql.VarChar, regDate)
                 .query('INSERT INTO StudentsData (RegNo, StudentName, StudentMail, PhoneNumber, NationalID, ProfileImage, RegistrationDate, Password, DeptID, CourseID) VALUES (@regNo, @studentName, @mail, @phoneNo, @nationalId, @image, @regDate,  @hashedPassword, @deptId, @courseId)');
-            res.status(200).send({ message: 'Registered successfully' });
+            
+            //inserting in Fee table can only happen after student registration
+            await pool.request()
+                .input('regNo', sql.VarChar, regNo)
+                .input('payableFee', sql.Int, payableFee)
+                .input('feePaid', sql.Int, feePaid)
+                .input('balance', sql.Int, balance)
+                .query('INSERT INTO Fee (RegNo, PayableFee, FeePaid, Arrears) VALUES (@regNo, @payableFee, @feePaid, @balance)')
+
+                res.status(200).send({ message: 'Registered successfully' });
+
         }
 
     } catch (error) {
@@ -135,10 +157,11 @@ export const studentLogin = async (req, res) => {
 
     const result = await pool.request()
         .input('regNo', sql.VarChar, regNo)
-        .query(`SELECT s.RegNo, s.StudentName, s.Password, s.StudentMail, s.PhoneNumber, s.NationalID, s.ProfileImage, d.DeptName, c.CourseName FROM StudentsData s 
+        .query(`SELECT s.RegNo, s.StudentName, s.Password, s.StudentMail, s.PhoneNumber, s.NationalID, s.ProfileImage, d.DeptName, c.CourseName, f.PayableFee, f.FeePaid, f.Arrears FROM StudentsData s
             JOIN Departments d ON s.DeptID = d.DeptID
             JOIN Courses c ON s.CourseID = c.CourseID
-            WHERE RegNo = @regNo`);
+            JOIN Fee f ON  s.RegNo = f.RegNo
+            WHERE s.RegNo = @regNo`);
 
     const user = result.recordset[0];
     if (!user) {
@@ -148,7 +171,7 @@ export const studentLogin = async (req, res) => {
             res.status(401).json({ error: 'Authentication failed. Wrong credentials.' });
         } else {
             const token = `JWT ${jwt.sign({ username: user.StudentName, email: user.StudentMail }, config.jwt_secret)}`;
-            res.status(200).json({ email: user.StudentMail, username: user.StudentName, id: user.RegNo, phone: user.PhoneNumber, nationalId: user.NationalID, department: user.DeptName, course: user.CourseName, token: token });
+            res.status(200).json({ email: user.StudentMail, username: user.StudentName, id: user.RegNo, phone: user.PhoneNumber, nationalId: user.NationalID, department: user.DeptName, course: user.CourseName, balance: user.Arrears, PayableFee: user.PayableFee, FeePaid: user.FeePaid, token: token });
         }
     }
 
@@ -161,7 +184,7 @@ export const staffLogin = async (req, res) => {
 
     const result = await pool.request()
         .input('email', sql.VarChar, email)
-        .query("SELECT L.LecName, L.PhoneNumber, L.LecMail, L.Password, d.DeptName FROM LecturersData L JOIN Departments d ON L.DeptID = d.DeptID WHERE L.LecMail = @email");
+        .query("SELECT L.LecName, L.PhoneNumber, L.LecMail, L.Password, L.NationalID, d.DeptName FROM LecturersData L JOIN Departments d ON L.DeptID = d.DeptID WHERE L.LecMail = @email");
 
     const user = result.recordset[0];
     if (!user) {
@@ -171,7 +194,7 @@ export const staffLogin = async (req, res) => {
             res.status(401).json({ error: 'Wrong credentials.' });
         } else {
             const token = `JWT ${jwt.sign({ username: user.LecName, email: user.LecMail }, config.jwt_secret)}`;
-            res.status(200).json({ email: user.LecMail, username: user.LecName, nationalId: user.NationalID, department: user.DeptName, token: token });
+            res.status(200).json({ email: user.LecMail, username: user.LecName, nationalId: user.NationalID, phoneNo: user.PhoneNumber, department: user.DeptName, token: token });
         }
     }
 

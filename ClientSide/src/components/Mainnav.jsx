@@ -7,38 +7,31 @@ import BookExam from './BookExam'
 import '../stylingFiles/mainnav.css'
 
 export function Mainnav() {
-    const { ui } = useContext(Context)
+    const { student } = useContext(Context)
  
   return (
     <div className='mainnav'>
         <h1>Student Portal</h1>
         {
-            ui == 'profile' ? (
+            student == 'profile' ? (
                 <div className='mainnav-wrapper'>
                     <Profile/>
                 </div>
-            ): ui == 'exam' ? (
+            ): student == 'exam' ? (
                 <div className='mainnav-wrapper'>
-                    <h2>Exam Registration</h2>
                     <BookExam />
                 </div>
-            ): ui == 'fee' ? (
+            ): student == 'fee' ? (
                 <div className='mainnav-wrapper'>
-                    <h2>Fee Statement</h2>
                     <Fee />
                 </div>
-            ): ui == 'progress' ? (
+            ): student == 'progress' ? (
                 <div className='mainnav-wrapper'>
                     <h2>Student Progress</h2>
                 </div>
 
             ): null
         }
-       
-    
-       
-
- 
     </div>
   )
 }

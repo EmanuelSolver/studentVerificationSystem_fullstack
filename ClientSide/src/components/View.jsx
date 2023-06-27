@@ -1,4 +1,3 @@
-import '../stylingFiles/fee.css'
 import  { useEffect, useContext, useState } from 'react'
 import { Context } from '../context/usercontext/context'
 import axios from 'axios'
@@ -9,7 +8,7 @@ export function Students() {
     const [data, setData] = useState([])
 
     const getData = async () => {
-        const res = await axios.get(`${apiDomain}/students`,{
+        const res = await axios.get(`${apiDomain}/admin`,{
             headers: { 'Authorization': `${user.token}`}
         })
         setData(res.data)

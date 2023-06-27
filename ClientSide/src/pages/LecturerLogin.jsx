@@ -7,7 +7,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { apiDomain } from '../utils/utils'
 import { useContext } from 'react'
-import { Context } from "../context/staffContext/context";
+import { Context } from "../context/usercontext/context";
 
 const LectureLogin = () => {
     const navigate = useNavigate()

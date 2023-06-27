@@ -1,21 +1,29 @@
-import { getStudents,getLecturers, geFeeStatements, removeStudent, updatePassword, getInfo } from '../controllers/activityController.js';
-import { studentLogin, registerLecturers,  registerStudents, loginRequired, adminLogin, staffLogin, registerAdmin } from '../controllers/userControllers.js';
+import { getStudents,getLecturers, getFeeStatements, removeStudent, updatePassword, getInfo } from '../controllers/activityController.js';
+import { studentLogin, registerLecturers,  registerStudents, loginRequired, adminLogin, staffLogin, registerAdmin } from '../controllers/authControllers.js';
+import { BookExam, verifyStudent, verifiedStudents } from '../controllers/portalController.js';
 
 const routes = (app) => {
     //Restricted routes, you have to login first
     app.route('/students')
-        .get(loginRequired, getStudents)
+        .post(loginRequired, BookExam)
         .put(loginRequired, updatePassword)
-        .delete(loginRequired, removeStudent)
+    
 
     app.route('/lecturers')
         .get(loginRequired, getLecturers)
+        
+
+    app.route('/verifyStudent')
+        .post(loginRequired, verifyStudent)
+        .get(loginRequired, verifiedStudents)
 
     app.route('/fee')
-        .get(loginRequired, geFeeStatements)
+        .get(loginRequired, getFeeStatements)
 
-    app.route('/activity/:id')
+    app.route('/admin')
+        .get(loginRequired, getStudents)
         .get(loginRequired, getInfo)
+        .delete(loginRequired, removeStudent)
   
 
     // open routes

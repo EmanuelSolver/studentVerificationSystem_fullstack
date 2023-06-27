@@ -38,7 +38,7 @@ export const getLecturers = async (req, res) => {
     }
 };
 
-export const geFeeStatements = async (req, res) => {
+export const getFeeStatements = async (req, res) => {
     try {
         let pool = await sql.connect(config.sql);  //establish a connection to the database
         const result = await pool.request()        // make a request to the database
@@ -71,7 +71,6 @@ export const removeStudent = async (req, res) => {
         sql.close();
     }
 };
-
 
 export const getInfo = async(req, res) =>{
     res.send('getting info for a particular person');
