@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios'
@@ -7,12 +7,35 @@ import '../stylingFiles/StudentRegister.css';
 import '../stylingFiles/StudentLogin.css';
 import { useNavigate } from 'react-router-dom'
 import { apiDomain } from '../utils/utils'
+import imageHolder from '../assets/react.svg'
 
-const departments = ['Arts & Sociology', 'Business & Education', 'Construction & Engineering', 'Pure & Applied Sciences'];
-const courses = ['Fashion Design', 'Film Production','Economics & Statistics', 'Business commerce', 'Mechanical Engineering','Electrical Engineering', 'Forensics', 'Mathematics & Computer Science']; // Replace with your course options
 
 const SignUpForm = () => {
-    const navigate = useNavigate()
+
+      const navigate = useNavigate()
+      //get departments and courses from the database
+      const [department, setDepartment] = useState([])
+      const [course, setCourse] = useState([])
+
+      const getDepartments = async () => {
+          const response = await axios.get(`${apiDomain}/departmentNames`,)
+          setDepartment(response.data)
+      }
+
+      //get courses
+      const getCourses = async () => {
+        const res = await axios.get(`${apiDomain}/courseNames`,)
+        setCourse(res.data)
+    }
+
+    useEffect(() =>{
+      
+        getDepartments()
+        getCourses()
+    }, [])
+
+    // select image from local machine as profile picture
+    const [file, setFile] = useState(null);
 
     //create a schema to validate input fields before submission
     const schema = yup.object().shape({
@@ -34,34 +57,80 @@ const SignUpForm = () => {
         resolver: yupResolver(schema),
     });
 
+    const validateFile = (file) => {
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+      if (validTypes.indexOf(file.type) === -1) {
+        alert('Use .jpeg, .png, .jpg or .gif formats')
+      } else if (file.size > 1024 * 1024 * 5) {
+        alert('File size is too large')
+      } else {
+        return true;
+      }
+    }
+
     //send data to the database via the local API using axios
     const dataToServer = (data) => {
+      console.log(data);
+      validateFile(file);
+      let imagePath = Date.now() + file.name;
+      let category = 'studentImage';
+      const formData = new FormData();
+      formData.append('imagePath', imagePath);
+      formData.append('category', category)
+      formData.append('file', file);
+      console.log(formData)
 
-        axios.post(`${apiDomain}/register/students`, data)
-                .then((response) =>{
-                  response.data.message && alert(response.data.message)
-                  console.log(response)
-                  navigate("/studentLogin")
+      axios.post(`${apiDomain}/register/students`, data, imagePath)
+          .then((response) =>{
+          response.data.message && alert(response.data.message)
+          console.log(imagePath)
+          setFile(null);
+          console.log(response)
+          navigate("/studentLogin")
         })
         .catch(({response}) =>{
 
           console.log(response.data.error)
         })
-    };
+    }; 
 
-    // select image from local machine as profile picture
-    const [selectedImage, setSelectedImage] = useState('waterfall.jpg');
-    const [uploadImage, setUploadImage] = useState('');
+   
 
-    const handleImageChange = (e) => {
-
-      const file = e.target.files[0];
+    // const saveImage = async (formData) => {
+   
+    //   await axios.post(`${apiDomain}/register/students`, formData)
+    //     .then((res) => {
+    //       alert(res.data.message)
+         
+    //       setFile(null);
+        
+    //     }).catch(({ response }) => {
+    //       alert(response.data.error)
       
-      setSelectedImage(URL.createObjectURL(file));
+    //     });
+    // }
 
-      setUploadImage("studentImages/" + file.name);
-      
-    };
+
+    // const handleUpload = async (e) => {
+    //   e.preventDefault();
+    //   if (!file) {
+    //     alert('Please select an image');
+    //   } else {
+  
+    //     validateFile(file);
+    //     let imagePath = Date.now() + file.name;
+    //     console.log(imagePath)
+    //     let category = 'studentImages';
+    //     const formData = new FormData();
+    //     formData.append('imagePath', imagePath);
+    //     formData.append('category', category)
+    //     formData.append('file', file);
+    //     console.log(formData)
+    //     // send to the server
+    //     dataToServer(formData);
+  
+    //   }
+    // }
 
 
     return (
@@ -79,7 +148,10 @@ const SignUpForm = () => {
 
             {/* display selected image */}
             <div className="profile">
-              <img src={selectedImage} alt="profile pic" />
+              {
+                file ? <img className="displayImg" src={URL.createObjectURL(file)} alt="no pic" />
+                  : <img className="displayImg" src={imageHolder} alt="nopic" />
+              }
             </div> 
             
             <div>
@@ -102,15 +174,14 @@ const SignUpForm = () => {
 
             <div>
               <label htmlFor="">Profile picture</label>
-              <input type="file" accept="image/*"  onChange={handleImageChange}/>
-              <input type="text" id="dontsee"  value={uploadImage}  {...register("image")}/>
+                <input type="file" name="" id="fileInput" onChange={(e) => setFile(e.target.files[0])} />
               <p>{errors.image?.message}</p> 
 
             </div>
 
             <div>
               <label htmlFor="phone">Phone Number:</label> <br />
-                <input type="tel" id="phone" placeholder='e.g. +21134567891' {...register("phoneNo")}/>
+                <input type="tel" id="phone" placeholder='e.g. +00134567891' {...register("phoneNo")}/>
                 <p>{errors.phoneNo?.message}</p>
             </div> 
 
@@ -124,8 +195,8 @@ const SignUpForm = () => {
               <label htmlFor="name">Department:</label>
                 <select name="department" id="department" {...register("deptId")}>
                     <option > - select - </option>
-                    {departments.map((dept, index) => (
-                        <option key={dept} value={index + 1}> {dept} </option>
+                    {department.map((dept, index) => (
+                        <option key={index} value={index + 1}>({dept.DeptInitials}) {dept.DeptName} </option>
                     ))}
                 </select>
               
@@ -136,15 +207,14 @@ const SignUpForm = () => {
               <label htmlFor="name">Course:</label>
                 <select name="course" id="course" {...register("courseId")}>
                     <option > - select - </option>
-                    {courses.map((course, index) => (
-                        <option key={index} value={index + 1}> {course} </option>
+                    {course.map((item, index) => (
+                        <option key={index} value={index + 1}>{item.CourseName}</option>
                     ))}
                 </select>
-              
                 <p>{errors.courseId?.message}</p>
             </div>
 
-            <button type="submit">Submit</button>
+            <button type="submit" >Submit</button>
       
         
           </form>

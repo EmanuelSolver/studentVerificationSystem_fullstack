@@ -23,7 +23,6 @@ export function AdminMainnav() {
                 </div>
             ): admin == 'fee' ? (
                 <div className='mainnav-wrapper'>
-                    <h2>Fee Statements</h2>
                     <FeeStatement />
                 </div>
             ): admin == 'registerLecturer' ? (

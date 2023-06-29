@@ -24,7 +24,6 @@ const AdminLogin = () => {
  });
 
   const dataToServer = (data) => {
-         console.log(data);
          axios.post(`${ apiDomain }/login/admin`, data)
          .then(({data}) =>{
            if(data.token){

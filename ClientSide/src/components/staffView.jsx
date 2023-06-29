@@ -55,9 +55,9 @@ export const StaffProfile = () => {
 )
 }
 
-
 export const Verify = () =>{
 
+  const [result, setResult] = useState();
   const { user } = useContext(Context)
 
   const schema = yup.object().shape({
@@ -68,30 +68,45 @@ export const Verify = () =>{
       resolver: yupResolver(schema),
   })
 
+  
+  //send ExamCode to the server
   const sendData = async (data) => {
-      axios.post(`${apiDomain}/verifyStudent`, data,{
+  
+    await axios.post(`${apiDomain}/verifyStudent`, data,{
           headers: { 'Authorization': `${user.token}` },
+          
       })
       .then((response) =>{
           response.data.message && alert(response.data.message)
+         
+          setResult(response.data[0])
+         
           reset()
       })
       .catch((response) =>{
           alert(response.data.error);
       });
   };
+  console.log(result)
 
-return (
+return(
   <div>
     <form className="simple-form" onSubmit={handleSubmit(sendData)}>
           <h3 style={{color:"white", textAlign:"center"}}><i>Verify Student</i></h3>
+          {result? <h3>{result.RegNo}</h3>: <h3>Check ExamCode you Entered</h3> }
           <div>
-            {/*student image display here */}
+            {/* student image display here  */}
+            {result? <img src={result.ProfileImage} style={{width:"200px"}} alt="image" />: <img src="keyboard.jpg" alt="nopic"/>}
           </div> 
           <label htmlFor="">Enter Exam_Code</label><br />
-          <input type="text" {...register("code")}/>
-          <p>{errors.code?.message}</p>
-          <button type='submit'>Check</button>
+          <input type="text" placeholder='e.g EX1111' {...register("code")}/>
+            <p>{errors.code?.message}</p>
+          <input  type="submit" style={{width:"70px", fontSize:"20px"}} value="submit"/>
+          <div>
+            {
+              result && <button type='submit'>Verify</button>
+            }
+          </div>
     </form>
   </div>
 )

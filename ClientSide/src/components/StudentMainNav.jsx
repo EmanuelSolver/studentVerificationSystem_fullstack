@@ -4,7 +4,8 @@ import { useContext } from 'react'
 import Profile from './Profile'
 import Fee from './Fee'
 import BookExam from './BookExam'
-import '../stylingFiles/mainnav.css'
+import UpdatePassword from './UpdatePassword'
+import Unenroll from './Unenroll'
 
 export function Mainnav() {
     const { student } = useContext(Context)
@@ -25,9 +26,14 @@ export function Mainnav() {
                 <div className='mainnav-wrapper'>
                     <Fee />
                 </div>
-            ): student == 'progress' ? (
+            ): student == 'update' ? (
                 <div className='mainnav-wrapper'>
-                    <h2>Student Progress</h2>
+                    <UpdatePassword />
+                </div>
+
+            ): student == 'unenroll' ? (
+                <div className='mainnav-wrapper'>
+                    <Unenroll />
                 </div>
 
             ): null

@@ -56,53 +56,57 @@ export const getFeeStatements = async (req, res) => {
     }
 };
 
-export const removeStudent = async (req, res) => {
+export const getDepartments = async(req, res) =>{
     try {
-        const { regNo } = req.body;
-        await sql.connect(config.sql);
-        await sql.query`DELETE FROM StudentsData WHERE RegNo = ${regNo}`;
-        res.status(200).json({ message: 'Record Deleted successfully' });
+        let pool = await sql.connect(config.sql);  //establish a connection to the database
+        const result = await pool.request()        // make a request to the database
+            .query("SELECT d.DeptName, d.DeptInitials, d.DeptDescription, s.CourseName FROM Departments d JOIN Courses s ON d.DeptId = s.DeptId");     // query the employees table in the database
+
+        !result.recordset[0] ? res.status(404).json({ message: 'Record not found' }) // check if there is a record in the table
+            : res.status(200).json(result.recordset); // return the result
 
     } catch (error) {
 
-        res.status(500).json({ error: 'An error occurred while deleting the Record' });
+        res.status(201).json({ error: error.message });
     } finally {
 
-        sql.close();
+        sql.close(); // Close the SQL connection
     }
-};
-
-export const getInfo = async(req, res) =>{
-    res.send('getting info for a particular person');
 }
 
-
-export const updatePassword = async(req, res) =>{
+export const getDepartmentNames = async(req, res) =>{
     try {
-        const { regNo, password } = req.body;
-        const hashedPassword = bcrypt.hashSync(password, 10);
-        let pool = await sql.connect(config.sql)
+        let pool = await sql.connect(config.sql);  //establish a connection to the database
+        const result = await pool.request()        // make a request to the database
+            .query("SELECT DeptName, DeptInitials FROM Departments");     // query the employees table in the database
 
-        const result = await pool.request()
-            .input('regNo', sql.VarChar, regNo)
-            .query('SELECT * FROM StudentsData WHERE RegNo = @regNo');
-    
-        const user = result.recordset[0];
-        if (user) { 
-            await sql.query`UPDATE StudentsData SET Password = ${hashedPassword} WHERE RegNo = ${regNo}`;
-            res.status(200).json({ Message: 'Password Updated successfully' });
+        !result.recordset[0] ? res.status(404).json({ message: 'No Records found' }) // check if there is a record in the table
+            : res.status(200).json(result.recordset); // return the result
 
-        } else{
-            res.status(404).json({ Error: 'User Does not Exist' });
-
-        }
-      
     } catch (error) {
 
-        res.status(500).json({ Error: error.message });
+        res.status(201).json({ error: error.message });
     } finally {
 
-        sql.close();
+        sql.close(); 
     }
+}
 
-};
+export const getCourseNames = async(req, res) =>{
+    try {
+        let pool = await sql.connect(config.sql);  //establish a connection to the database
+        const result = await pool.request()        // make a request to the database
+            .query("SELECT CourseName FROM Courses");     // query the employees table in the database
+
+        !result.recordset[0] ? res.status(404).json({ message: 'Record not found' }) // check if there is a record in the table
+            : res.status(200).json(result.recordset); // return the result
+
+    } catch (error) {
+
+        res.status(201).json({ error: error.message });
+    } finally {
+
+        sql.close(); 
+    }  
+}
+

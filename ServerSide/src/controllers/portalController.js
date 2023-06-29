@@ -2,6 +2,7 @@ import sql from 'mssql';
 import config from '../db/config.js'
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
+import bcrypt from 'bcrypt';
 
 export const  BookExam = async(req, res) =>{
     dotenv.config();
@@ -68,7 +69,23 @@ export const  BookExam = async(req, res) =>{
 }
 
 export const verifyStudent = async(req, res) => {
-    
+    try {
+        const { code } = req.body;
+
+        let pool = await sql.connect(config.sql);
+        const result = await pool.request()
+            .input('code', sql.VarChar, code)
+            .query('SELECT e.RegNo, s.ProfileImage FROM ExamRegister e JOIN StudentsData s ON e.RegNo = s.RegNo WHERE ExamCode = @code');
+        
+        !result.recordset[0] ? res.status(404).json({ message: 'Record not found' }) // check if there is a record in the table
+            : res.status(200).json(result.recordset); // return the result
+    } catch (error) {
+
+        res.status(500).json({ error: 'Student Not Registered for Exam' });
+    } finally {
+
+        sql.close();
+    }   
 }
 
 
@@ -89,3 +106,71 @@ export const verifiedStudents = async(req, res) => {
         sql.close(); // Close the SQL connection
     }
 }
+
+export const updatePassword = async(req, res) =>{
+    const { nationalId, password } = req.body;
+    const hashedPassword = bcrypt.hashSync(password.toString(), 10);
+    
+    try {
+      
+        let pool = await sql.connect(config.sql)
+
+        const result = await pool.request()
+            .input('idNo', sql.Int, nationalId)
+            .query('SELECT * FROM StudentsData WHERE NationalID = @idNo');
+    
+        const user = result.recordset[0];
+        if (user) { 
+            await pool.request()
+                .input('idNo', sql.Int, nationalId)
+                .input('hashedPassword', sql.VarChar, hashedPassword)
+                .query('UPDATE StudentsData SET Password = @hashedPassword WHERE NationalID = @idNo');
+            res.status(200).json({ Message: 'Password Updated successfully' });
+
+        } else{
+            res.status(404).json({ Error: 'User Does not Exist' });
+
+        }
+      
+    } catch (error) {
+
+        res.status(500).json({ Error: error.message });
+    } finally {
+
+        sql.close();
+    }
+
+};
+
+
+export const removeStudent = async (req, res) => {
+    const { regNo, nationalId, reason } = req.body;
+
+    try {
+
+        let pool = await sql.connect(config.sql);
+        const result = await pool.request()
+            .input('regNo', sql.VarChar, regNo)
+            .input('idNo', sql.Int, nationalId)
+            .query('SELECT * FROM StudentsData WHERE RegNo = @regNo AND NationalID = @idNo');
+        
+        const user = result.recordset[0];
+        if(user){
+            await sql.connect(config.sql);
+            await sql.query`DELETE FROM StudentsData WHERE RegNo = ${regNo}`;
+            await sql.query`INSERT INTO UnenrolledStudents(RegNo, Reason) VALUES(${regNo}, ${reason})`;
+            res.status(200).json({ message: 'Unenrolled Successfully -- we regret' });
+        }else{
+            res.status(404).json({ Error: "Student doesn't Exist" });
+
+        }
+       
+
+    } catch (error) {
+
+        res.status(500).json({ error: 'Error Occurred while UnEnrolling student' });
+    } finally {
+
+        sql.close();
+    }
+};

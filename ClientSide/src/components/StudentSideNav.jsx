@@ -21,9 +21,13 @@ export function Sidenav() {
 
         dispatch({type: 'BOOK_EXAM', payload: 'exam'})
     }
-    const handleProgress = () =>{
+    const handleUpdate = () =>{
 
-        dispatch({type: 'PROGRESS', payload: 'progress'})
+        dispatch({type: 'UPDATE', payload: 'update'})
+    }
+    const handleUnenroll = () =>{
+
+        dispatch({type: 'UNENROLL', payload: 'unenroll'})
     }
     
   return (
@@ -35,7 +39,8 @@ export function Sidenav() {
         <div className="sidenav-wrapper">
             <div className="sidenav-item" onClick={handleFee}><FaMoneyCheckAlt/> Fee</div>
             <div className="sidenav-item" onClick={handleExam}><FaBookReader/> BookExam</div>
-            <div className="sidenav-item" onClick={handleProgress}><GiProgression/> Progress</div>
+            <div className="sidenav-item" onClick={handleUpdate}><GiProgression/> Update</div>
+            <div className="sidenav-item" onClick={handleUnenroll}><GiProgression/> UnEnroll</div>
 
         </div>
     

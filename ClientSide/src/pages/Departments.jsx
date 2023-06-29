@@ -1,16 +1,19 @@
 import '../stylingFiles/Departments.css'
-
-const data = [
-  { title: 'Pure & Applied Sciences', description: 'Our department -- Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi perspiciatis voluptatibus ratione similique, blanditiis quo tempora voluptas nemo, dolorum possimus, est laudantium reiciendis aspernatur totam minus officia architecto obcaecati consequatur!' },
-  { title: 'Health Sciences', description: 'Description  perspiciatis voluptatibus ratione similique, blanditiis quo tempora voluptas nemo, dolorum possimus, est laudantium reiciendis aspernatur totam minus officia architecto obcaecati consequatur!' },
-  { title: 'Engineering', description: 'Card similique, blanditiis quo tempera voluptas nemo, dolorum possimus, est laudantium' },
-  { title: 'Business & Economics', description: 'Card similique, blanditiis quo tempora voluptas nemo, dolorum possimus, est laudantium' },
-  { title: 'Education & Arts', description: 'Card similique, blanditiis quo tempora voluptas nemo, dolorum possimus, est laudantium' },
-
-];
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { apiDomain } from '../utils/utils';
 
 const Departments = () => {
+  const [data, setData] = useState([])
 
+  const getData = async () => {
+      const res = await axios.get(`${apiDomain}/departments`,)
+      setData(res.data)
+  }
+  useEffect(() =>{
+
+      getData()
+  }, [])
 
   return (
     <div className='department'>
@@ -21,8 +24,10 @@ const Departments = () => {
         data.map((item, index) => (
           <>
             <div className="card" key={index}>
-              <h2 >{item.title}</h2>
-              <p >{item.description}</p>
+              <h2 >{item.DeptName} ({item.DeptInitials})</h2>
+              <h3 style={{color:"black"}}>Course: {item.CourseName}</h3>
+              <p >{item.DeptDescription}</p>
+           
           </div>
           </> 
       ))}

@@ -13,10 +13,14 @@ const Reducer = (state, action) => {
             return{
                 student: action.payload,
             }
-        case "PROGRESS":
+        case "UPDATE":
             return{
                 student: action.payload,
             }
+        case "UNENROLL":
+                return{
+                    student: action.payload,
+                }
         default:
             return state;
     }

@@ -1,13 +1,29 @@
-import { getStudents,getLecturers, getFeeStatements, removeStudent, updatePassword, getInfo } from '../controllers/activityController.js';
+import { getStudents,getLecturers, getFeeStatements, getDepartments, getDepartmentNames, getCourseNames } from '../controllers/activityController.js';
 import { studentLogin, registerLecturers,  registerStudents, loginRequired, adminLogin, staffLogin, registerAdmin } from '../controllers/authControllers.js';
-import { BookExam, verifyStudent, verifiedStudents } from '../controllers/portalController.js';
+import { BookExam, verifyStudent, verifiedStudents, updatePassword, removeStudent } from '../controllers/portalController.js';
+import multer from 'multer';
+
+
+//setup multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "images"); //null is error
+    },
+    filename: (req, file, cb) => {
+        cb(null, req.body.image);
+    },
+});
+
+const upload = multer({ storage: storage }); //upload file
 
 const routes = (app) => {
     //Restricted routes, you have to login first
     app.route('/students')
         .post(loginRequired, BookExam)
-        .put(loginRequired, updatePassword)
-    
+        .delete(loginRequired, removeStudent)
+      
+    app.route('/updateStudent')
+        .put(updatePassword)
 
     app.route('/lecturers')
         .get(loginRequired, getLecturers)
@@ -22,16 +38,24 @@ const routes = (app) => {
 
     app.route('/admin')
         .get(loginRequired, getStudents)
-        .get(loginRequired, getInfo)
         .delete(loginRequired, removeStudent)
-  
+
 
     // open routes
+    app.route('/departments')
+        .get(getDepartments)
+
+    app.route('/departmentNames')
+        .get(getDepartmentNames)
+
+    app.route('/courseNames')
+        .get(getCourseNames)
+
     app.route('/register/lecturers')
         .post(registerLecturers);
 
     app.route('/register/students')
-        .post(registerStudents);
+        .post(upload.single("file"), registerStudents);
 
     app.route('/login/student')
         .post(studentLogin);

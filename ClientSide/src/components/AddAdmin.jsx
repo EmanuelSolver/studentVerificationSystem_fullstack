@@ -13,7 +13,7 @@ const AddAdmin = () => {
         email: yup.string().required(),
     })
 
- const { register, handleSubmit, reset } = useForm({
+ const { register, handleSubmit,formState: { errors }, reset } = useForm({
 
    resolver: yupResolver(schema),
  });
@@ -39,10 +39,15 @@ const AddAdmin = () => {
 
         <label htmlFor="">UserName:</label>
             <input type="text" {...register("userName")}/>
+            <p>{errors.userName?.message}</p>
+
         <label htmlFor="">Email:</label>
             <input type="email"{...register("email")}/>
+            <p>{errors.email?.message}</p>
+
         <label htmlFor="">National ID:</label>
             <input type="number" {...register("nationalId")}/>
+            <p>{errors.nationalId?.message}</p>
         <input type="submit" value="submit"/>
 
     </form>

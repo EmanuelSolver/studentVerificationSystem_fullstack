@@ -23,10 +23,10 @@ export function Students() {
     <div>
         <table className="table">
             <thead>
-                <th>Student Name</th>
-                <th>Registration No</th>
-                <th>Mobile No</th>
-                <th>National ID</th>
+                <th>Student_Name</th>
+                <th>Registration_No</th>
+                <th>Mobile_Number</th>
+                <th>National_ID</th>
                 <th>Email</th>
 
             </thead>
@@ -72,9 +72,9 @@ export function Lecturers() {
     <div>
         <table className="table">
             <thead>
-                <th>Lecturer Name</th>
-                <th>National ID</th>
-                <th>Mobile No</th>
+                <th>Lecturer_Name</th>
+                <th>National_ID</th>
+                <th>Mobile_No</th>
                 <th>Email</th>
                 <th> </th>
 
@@ -123,10 +123,13 @@ export function FeeStatement() {
     <div>
         <table className='table'>
             <thead>
-                <th>Student Name</th>
-                <th>Registration No</th>
-                <th>Fee Paid </th>
-                <th>Fee Balance</th>
+                <tr>.</tr>
+                <tr>
+                <th>Student_Name</th>
+                <th>Registration_No</th>
+                <th>Fee_Paid </th>
+                <th>Fee_Balance</th>
+                </tr>
             </thead>
             <tbody>
 

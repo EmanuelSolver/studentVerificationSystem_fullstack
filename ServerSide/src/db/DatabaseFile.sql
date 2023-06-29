@@ -4,6 +4,7 @@ CREATE TABLE Departments(
 	DeptID INT IDENTITY(1, 1),
 	DeptInitials VARCHAR(10),
 	DeptName VARCHAR(100),
+	DeptDescription VARCHAR(255),
 
 	PRIMARY KEY(DeptID)
 );
@@ -85,6 +86,13 @@ CREATE TABLE VerifiedStudents(
 	FOREIGN KEY (RegNo) REFERENCES StudentsData(RegNo),
 	FOREIGN KEY (LecID) REFERENCES LecturersData(LecID)  ON DELETE CASCADE
 );
+
+CREATE TABLE UnenrolledStudents(
+	RegNo VARCHAR(30) , 
+	Reason VARCHAR(255), 
+	PRIMARY KEY(RegNo)
+);
+
 
 --Populating data to the tables
 

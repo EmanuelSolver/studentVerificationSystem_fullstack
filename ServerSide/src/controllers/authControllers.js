@@ -25,7 +25,7 @@ export const registerStudents = async (req, res) => {
             .input('regNo', sql.VarChar, regNo)
             .query('SELECT * FROM StudentsData WHERE RegNo = @regNo');
         
-            const user = result.recordset[0];
+        const user = result.recordset[0];
         if (user) {
             res.status(409).json({ error: 'Student already exists' });
         } else {

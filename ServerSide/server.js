@@ -7,6 +7,7 @@ import cors from 'cors'
 
 const app = express();
 app.use(cors())
+app.use("./src/images", express.static('images')); //using path lib to access images in folders
 
 //middleware
 app.use(express.urlencoded({ extended: true }));
