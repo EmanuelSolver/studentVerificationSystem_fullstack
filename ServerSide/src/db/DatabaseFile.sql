@@ -28,7 +28,6 @@ CREATE TABLE StudentsData(
 	StudentMail VARCHAR(50),
 	PhoneNumber VARCHAR(15),
 	NationalID INT,  
-	ProfileImage VARCHAR(255),
 	RegistrationDate DATE,
 	Password VARCHAR(255),
 	DeptID INT NOT NULL,
@@ -90,6 +89,7 @@ CREATE TABLE VerifiedStudents(
 CREATE TABLE UnenrolledStudents(
 	RegNo VARCHAR(30) , 
 	Reason VARCHAR(255), 
+	Unenrollment_Date DATE,
 	PRIMARY KEY(RegNo)
 );
 

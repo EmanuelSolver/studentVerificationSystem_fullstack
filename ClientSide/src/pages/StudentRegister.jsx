@@ -7,7 +7,7 @@ import '../stylingFiles/StudentRegister.css';
 import '../stylingFiles/StudentLogin.css';
 import { useNavigate } from 'react-router-dom'
 import { apiDomain } from '../utils/utils'
-import imageHolder from '../assets/react.svg'
+import imageHolder from '../../public/graduation-icon.svg'
 
 
 const SignUpForm = () => {
@@ -34,8 +34,6 @@ const SignUpForm = () => {
         getCourses()
     }, [])
 
-    // select image from local machine as profile picture
-    const [file, setFile] = useState(null);
 
     //create a schema to validate input fields before submission
     const schema = yup.object().shape({
@@ -57,34 +55,16 @@ const SignUpForm = () => {
         resolver: yupResolver(schema),
     });
 
-    const validateFile = (file) => {
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-      if (validTypes.indexOf(file.type) === -1) {
-        alert('Use .jpeg, .png, .jpg or .gif formats')
-      } else if (file.size > 1024 * 1024 * 5) {
-        alert('File size is too large')
-      } else {
-        return true;
-      }
-    }
 
     //send data to the database via the local API using axios
     const dataToServer = (data) => {
       console.log(data);
-      validateFile(file);
-      let imagePath = Date.now() + file.name;
-      let category = 'studentImage';
-      const formData = new FormData();
-      formData.append('imagePath', imagePath);
-      formData.append('category', category)
-      formData.append('file', file);
-      console.log(formData)
+  
 
-      axios.post(`${apiDomain}/register/students`, data, imagePath)
+      axios.post(`${apiDomain}/register/students`, data)
           .then((response) =>{
           response.data.message && alert(response.data.message)
-          console.log(imagePath)
-          setFile(null);
+          
           console.log(response)
           navigate("/studentLogin")
         })
@@ -93,44 +73,6 @@ const SignUpForm = () => {
           console.log(response.data.error)
         })
     }; 
-
-   
-
-    // const saveImage = async (formData) => {
-   
-    //   await axios.post(`${apiDomain}/register/students`, formData)
-    //     .then((res) => {
-    //       alert(res.data.message)
-         
-    //       setFile(null);
-        
-    //     }).catch(({ response }) => {
-    //       alert(response.data.error)
-      
-    //     });
-    // }
-
-
-    // const handleUpload = async (e) => {
-    //   e.preventDefault();
-    //   if (!file) {
-    //     alert('Please select an image');
-    //   } else {
-  
-    //     validateFile(file);
-    //     let imagePath = Date.now() + file.name;
-    //     console.log(imagePath)
-    //     let category = 'studentImages';
-    //     const formData = new FormData();
-    //     formData.append('imagePath', imagePath);
-    //     formData.append('category', category)
-    //     formData.append('file', file);
-    //     console.log(formData)
-    //     // send to the server
-    //     dataToServer(formData);
-  
-    //   }
-    // }
 
 
     return (
@@ -148,10 +90,8 @@ const SignUpForm = () => {
 
             {/* display selected image */}
             <div className="profile">
-              {
-                file ? <img className="displayImg" src={URL.createObjectURL(file)} alt="no pic" />
-                  : <img className="displayImg" src={imageHolder} alt="nopic" />
-              }
+        
+              <img className="displayImg" src={imageHolder} alt="nopic" />
             </div> 
             
             <div>
@@ -171,13 +111,6 @@ const SignUpForm = () => {
                 <input type="email" id="email" placeholder='e.g. yourname@example.com' {...register("studentEmail")}/>
                 <p>{errors.studentEmail?.message}</p>
             </div> 
-
-            <div>
-              <label htmlFor="">Profile picture</label>
-                <input type="file" name="" id="fileInput" onChange={(e) => setFile(e.target.files[0])} />
-              <p>{errors.image?.message}</p> 
-
-            </div>
 
             <div>
               <label htmlFor="phone">Phone Number:</label> <br />

@@ -23,15 +23,16 @@ export function Students() {
     <div>
         <table className="table">
             <thead>
-                <th>Student_Name</th>
-                <th>Registration_No</th>
-                <th>Mobile_Number</th>
-                <th>National_ID</th>
-                <th>Email</th>
-
+                <tr>
+                    <th>Student_Name</th>
+                    <th>Registration_No</th>
+                    <th>Mobile_Number</th>
+                    <th>National_ID</th>
+                    <th>Email</th>
+                </tr>
             </thead>
             <tbody>        
-        {
+            {
             data && data.map((item, index) => {
                 return (
                     <>
@@ -46,7 +47,7 @@ export function Students() {
                 )
                 
               })
-        }        
+            }        
         </tbody>
         </table>    
     </div>

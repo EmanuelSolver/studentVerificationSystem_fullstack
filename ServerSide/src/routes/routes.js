@@ -1,20 +1,7 @@
 import { getStudents,getLecturers, getFeeStatements, getDepartments, getDepartmentNames, getCourseNames } from '../controllers/activityController.js';
 import { studentLogin, registerLecturers,  registerStudents, loginRequired, adminLogin, staffLogin, registerAdmin } from '../controllers/authControllers.js';
 import { BookExam, verifyStudent, verifiedStudents, updatePassword, removeStudent } from '../controllers/portalController.js';
-import multer from 'multer';
 
-
-//setup multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "images"); //null is error
-    },
-    filename: (req, file, cb) => {
-        cb(null, req.body.image);
-    },
-});
-
-const upload = multer({ storage: storage }); //upload file
 
 const routes = (app) => {
     //Restricted routes, you have to login first
@@ -55,7 +42,7 @@ const routes = (app) => {
         .post(registerLecturers);
 
     app.route('/register/students')
-        .post(upload.single("file"), registerStudents);
+        .post(registerStudents);
 
     app.route('/login/student')
         .post(studentLogin);

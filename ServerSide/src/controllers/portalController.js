@@ -30,34 +30,8 @@ export const  BookExam = async(req, res) =>{
                 .input('examCode', sql.VarChar, examCode)
                 .input('regNo', sql.VarChar, regNo)
                 .query('INSERT INTO ExamRegister (RegNo, ExamCode) VALUES (@regNo, @examCode)');
-                res.status(200).send({ message: 'Booked Exam successfully' });
+                res.status(200).send({ message: 'Booked Exam successfully -- Your ExamCode is @examCode' });
 
-            // Create a transporter using SMTP settings for Gmail
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: 'personalmygallery@gmail.com', // Your Gmail address
-                    pass: GMAIL_PASS // Your Gmail password or application-specific password
-                }
-            });
-            
-            // Define the email options
-            const mailOptions = {
-                from: 'personalmygallery@gmail.com', // Sender address
-                to: `${receiver}`, // Recipient address
-                subject: 'ExamCode!', // Subject line
-                text: `This is your unique Exam Code ${examCode}`, // Plain text body
-                html: '<b>This is ourCollege Institute.</b>' // HTML body
-            };
-            
-            // Send the email
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.error('Error sending email:', error);
-                } else {
-                    console.log('Check your Email:', info.response);
-                }
-            });
         }
 
         else{
@@ -109,7 +83,7 @@ export const verifiedStudents = async(req, res) => {
 
 export const updatePassword = async(req, res) =>{
     const { nationalId, password } = req.body;
-    const hashedPassword = bcrypt.hashSync(password.toString(), 10);
+    const hashedPassword = bcrypt.hashSync(password, 10);
     
     try {
       
@@ -145,32 +119,38 @@ export const updatePassword = async(req, res) =>{
 
 export const removeStudent = async (req, res) => {
     const { regNo, nationalId, reason } = req.body;
+    const regDate = new Date().toLocaleDateString();
 
     try {
-
-        let pool = await sql.connect(config.sql);
-        const result = await pool.request()
-            .input('regNo', sql.VarChar, regNo)
-            .input('idNo', sql.Int, nationalId)
-            .query('SELECT * FROM StudentsData WHERE RegNo = @regNo AND NationalID = @idNo');
-        
-        const user = result.recordset[0];
-        if(user){
-            await sql.connect(config.sql);
-            await sql.query`DELETE FROM StudentsData WHERE RegNo = ${regNo}`;
-            await sql.query`INSERT INTO UnenrolledStudents(RegNo, Reason) VALUES(${regNo}, ${reason})`;
-            res.status(200).json({ message: 'Unenrolled Successfully -- we regret' });
-        }else{
-            res.status(404).json({ Error: "Student doesn't Exist" });
-
-        }
-       
-
+      const pool = await sql.connect(config.sql);
+      const result = await pool
+        .request()
+        .input('regNo', sql.VarChar, regNo)
+        .input('idNo', sql.Int, nationalId)
+        .query('SELECT * FROM StudentsData WHERE RegNo = @regNo AND NationalID = @idNo');
+  
+      const user = result.recordset[0];
+      if (user) {
+        await pool
+          .request()
+          .input('regNo', sql.VarChar, regNo)
+          .query('DELETE FROM StudentsData WHERE RegNo = @regNo');
+  
+        await pool
+          .request()
+          .input('regNo', sql.VarChar, regNo)
+          .input('reason', sql.VarChar, reason)
+          .input('regDate', sql.VarChar, regDate)
+          .query('INSERT INTO UnenrolledStudents(RegNo, Reason, Unenrollment_Date) VALUES(@regNo, @reason, @regDate)');
+  
+        res.status(200).json({ message: 'Student unenrolled successfully' });
+      } else {
+        res.status(404).json({ error: "Student doesn't exist" });
+      }
     } catch (error) {
-
-        res.status(500).json({ error: 'Error Occurred while UnEnrolling student' });
+      res.status(500).json({ error: 'An error occurred while unenrolling the student' });
     } finally {
-
-        sql.close();
+      sql.close();
     }
-};
+  };
+  

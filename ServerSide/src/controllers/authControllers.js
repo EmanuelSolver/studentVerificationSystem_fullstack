@@ -14,7 +14,7 @@ export const loginRequired = (req, res, next) => {
 
 export const registerStudents = async (req, res) => {
     
-    const { regNo, studentEmail, studentName, deptId, courseId, nationalId, phoneNo, image} = req.body;
+    const { regNo, studentEmail, studentName, deptId, courseId, nationalId, phoneNo} = req.body;
     
     const hashedPassword = bcrypt.hashSync(nationalId.toString() , 10);
     const regDate = new Date().toLocaleDateString();
@@ -47,10 +47,9 @@ export const registerStudents = async (req, res) => {
                 .input('courseId', sql.Int, courseId)
                 .input('deptId', sql.Int, deptId)
                 .input('nationalId', sql.Int, nationalId)
-                .input('image', sql.VarChar, image)
                 .input('phoneNo', sql.VarChar, phoneNo)
                 .input('regDate', sql.VarChar, regDate)
-                .query('INSERT INTO StudentsData (RegNo, StudentName, StudentMail, PhoneNumber, NationalID, ProfileImage, RegistrationDate, Password, DeptID, CourseID) VALUES (@regNo, @studentName, @mail, @phoneNo, @nationalId, @image, @regDate,  @hashedPassword, @deptId, @courseId)');
+                .query('INSERT INTO StudentsData (RegNo, StudentName, StudentMail, PhoneNumber, NationalID, RegistrationDate, Password, DeptID, CourseID) VALUES (@regNo, @studentName, @mail, @phoneNo, @nationalId, @regDate,  @hashedPassword, @deptId, @courseId)');
             
             //inserting in Fee table can only happen after student registration
             await pool.request()

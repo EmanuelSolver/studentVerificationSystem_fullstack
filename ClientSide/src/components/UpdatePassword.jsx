@@ -8,8 +8,15 @@ import '../stylingFiles/StudentRegister.css';
 
 const UpdatePassword = () => {
     const schema = yup.object().shape({
-        password: yup.string().required('Enter password'),
-        confirm: yup.string().required('Confirm password'),
+        password: yup.string().matches(
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{4,}$/
+            ,
+            'password must contain at least 4 characters,uppercase,lowercase,number & Alphanumerics'
+          ).required("Password is required"),
+          confirmPassword: yup
+            .string()
+            .oneOf([yup.ref("password"), null], "Passwords Don't match"),
+
         nationalId: yup.number().required('Enter National ID No'),
        
     })
@@ -50,9 +57,9 @@ const UpdatePassword = () => {
             <p>{errors.password?.message}</p>
 
         <label htmlFor="">Confirm Password:</label>
-            <input type="password" {...register("confirm")}/>
-            <p>{errors.confirm?.message}</p>
-        <input type="submit" value="submit"/>
+            <input type="password" {...register("confirmPassword")}/>
+            <p>{errors.confirmPassword?.message}</p>
+        <button type='submit'>Submit</button>
 
     </form>
   );
