@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { Students, Lecturers, FeeStatement } from './View'
 import AddAdmin from './AddAdmin'
 import SignUpForm from '../pages/LecturerRegister'
-
+import Unenroll from './Unenroll'
 
 export function AdminMainnav() {
     const { admin } = useContext(Context)
@@ -34,6 +34,10 @@ export function AdminMainnav() {
             ): admin == 'addAdmin' ? (
                 <div className='mainnav-wrapper'>
                     <AddAdmin/>
+                </div>
+            ): admin == 'removeStudent' ? (
+                <div className='mainnav-wrapper'>
+                    <Unenroll />
                 </div>
             ): null
         }

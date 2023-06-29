@@ -21,6 +21,10 @@ const Reducer = (state, action) => {
             return{
                 admin: action.payload,
             }
+        case "REMOVE_STUDENT":
+                return{
+                    admin: action.payload,
+                }
         default:
             return state
     }
