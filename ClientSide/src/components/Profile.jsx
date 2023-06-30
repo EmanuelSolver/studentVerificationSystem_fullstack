@@ -7,11 +7,6 @@ function Profile() {
     
     return (
     <div className='profile'>
-
-      <div className="userAvator">
-      <img src="honeycomb2.jpg" alt="not found" className='user-image'/>
-
-      </div>
       
         <table className="table">
         <thead>
