@@ -156,7 +156,7 @@ export const studentLogin = async (req, res) => {
 
     const result = await pool.request()
         .input('regNo', sql.VarChar, regNo)
-        .query(`SELECT s.RegNo, s.StudentName, s.Password, s.StudentMail, s.PhoneNumber, s.NationalID, s.ProfileImage, d.DeptName, c.CourseName, f.PayableFee, f.FeePaid, f.Arrears FROM StudentsData s
+        .query(`SELECT s.RegNo, s.StudentName, s.Password, s.StudentMail, s.PhoneNumber, s.NationalID, d.DeptName, c.CourseName, f.PayableFee, f.FeePaid, f.Arrears FROM StudentsData s
             JOIN Departments d ON s.DeptID = d.DeptID
             JOIN Courses c ON s.CourseID = c.CourseID
             JOIN Fee f ON  s.RegNo = f.RegNo

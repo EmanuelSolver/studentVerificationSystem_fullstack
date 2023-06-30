@@ -1,7 +1,6 @@
 import sql from 'mssql';
 import config from '../db/config.js'
 import dotenv from 'dotenv';
-import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 
 export const  BookExam = async(req, res) =>{
@@ -30,7 +29,7 @@ export const  BookExam = async(req, res) =>{
                 .input('examCode', sql.VarChar, examCode)
                 .input('regNo', sql.VarChar, regNo)
                 .query('INSERT INTO ExamRegister (RegNo, ExamCode) VALUES (@regNo, @examCode)');
-                res.status(200).send({ message: 'Booked Exam successfully -- Your ExamCode is @examCode' });
+                res.status(200).send({ message: `Booked Exam successfully -- Your ExamCode is ${examCode}` });
 
         }
 

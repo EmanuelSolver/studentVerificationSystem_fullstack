@@ -1,4 +1,4 @@
---CREATE  DATABASE CollegeSystemDb; 
+CREATE  DATABASE CollegeSystemDb; 
 
 CREATE TABLE Departments(
 	DeptID INT IDENTITY(1, 1),
