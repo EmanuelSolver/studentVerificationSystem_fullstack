@@ -8,10 +8,12 @@ import '../stylingFiles/StudentLogin.css';
 import { useNavigate } from 'react-router-dom'
 import { apiDomain } from '../utils/utils'
 import imageHolder from '../../public/graduation-icon.svg'
+import {toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const SignUpForm = () => {
-
+  
       const navigate = useNavigate()
       //get departments and courses from the database
       const [department, setDepartment] = useState([])
@@ -58,19 +60,38 @@ const SignUpForm = () => {
 
     //send data to the database via the local API using axios
     const dataToServer = (data) => {
-      console.log(data);
   
-
       axios.post(`${apiDomain}/register/students`, data)
           .then((response) =>{
-          response.data.message && alert(response.data.message)
-          
+          response.data.message && toast.success(response.data.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
           console.log(response)
-          navigate("/studentLogin")
+
+          setTimeout(() => {
+            navigate("/studentLogin")
+        }, 3000);
+          
         })
         .catch(({response}) =>{
 
-          console.log(response.data.error)
+          toast.error(response.data.error, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
         })
     }; 
 
@@ -90,7 +111,6 @@ const SignUpForm = () => {
 
             {/* display selected image */}
             <div className="profile">
-        
               <img className="displayImg" src={imageHolder} alt="nopic" />
             </div> 
             
@@ -149,7 +169,19 @@ const SignUpForm = () => {
 
             <button type="submit" >Submit</button>
       
-        
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+              />
+
           </form>
       </>
       

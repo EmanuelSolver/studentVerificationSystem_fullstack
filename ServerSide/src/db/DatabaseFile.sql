@@ -76,6 +76,15 @@ CREATE TABLE LecturersData(
 	FOREIGN KEY (DeptID) REFERENCES Departments(DeptID)  ON DELETE CASCADE 
 ); 
 
+CREATE TABLE AdminsData(  
+	Id INT IDENTITY(1, 1) ,
+	UserName VARCHAR(30),
+	Email VARCHAR(50),
+	NationalID INT,  
+	Password VARCHAR(255),
+	RegDate DATE,
+); 
+
 CREATE TABLE VerifiedStudents(
 	ID INT IDENTITY(1, 1),
 	RegNo VARCHAR(30) NOT NULL,
