@@ -164,7 +164,7 @@ export const studentLogin = async (req, res) => {
 
     const user = result.recordset[0];
     if (!user) {
-        res.status(401).json({ error: 'Are you a Registered student' });
+        res.status(401).json({ error: 'Not a Registered student' });
     } else {
         if (!bcrypt.compareSync(password, user.Password)) {
             res.status(401).json({ error: 'Authentication failed. Wrong credentials.' });

@@ -73,9 +73,8 @@
   .simple-form {
     display: flex;
     flex-direction: column;
-    width: 40%;
-    position: absolute;
-    left: 35%;
+    width: 80%;
+    left: 20%;
     
   }
 }

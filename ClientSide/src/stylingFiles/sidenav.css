@@ -26,3 +26,10 @@
     color: #fff;
     cursor: pointer;
 }
+
+@media screen and (max-width: 768px) {
+    .sidenav{
+       font-size: small;
+     margin-left: -10px;
+    }
+}

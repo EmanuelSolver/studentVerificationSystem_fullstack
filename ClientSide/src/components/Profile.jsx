@@ -6,17 +6,15 @@ function Profile() {
     const { user } = useContext(Context)
     
     return (
-    <div className='profile'>
-      
+    <div className='simple-form'>
+        <h2>Student Profile</h2>
         <table className="table">
         <thead>
-          <tr>
-            <td></td>
-            <td></td>
-          </tr>
+    
           <tr >
             <th >Student</th>
             <th>Credentials</th>
+           
           </tr>
         </thead>
 

@@ -9,9 +9,7 @@
     justify-content: center;
     align-items: center;
     font-size: 1.2rem;
-    
     top: 0;
-   
   }
   
   .navbar-container {
@@ -25,8 +23,6 @@
   .navbar-logo {
     color: #f7f5f5;
     justify-self: start;
-   
-    margin-top: 21px;
     cursor: pointer;
     text-decoration: none;
     font-size: 2rem;
@@ -66,15 +62,15 @@
   }
   
   @media screen and (max-width: 768px) {
- 
+    .navbar{
+      width: 120%;
+      font-size: small;
+    }
+    .navbar-logo{
+      display: none;
+    }
     .nav-links {
-      display: block;
-      text-align: left;
-      font-weight: 700;
-      position: relative;
-      left: -230%;
-      top: 100%;
-      color: aliceblue;
+      padding:  0.5rem;
     }
   
     .nav-links:hover {
@@ -88,8 +84,15 @@
         font-size: calc(150%);
     }
 
-    .nav-item {
-      height: 80px;
-    }
-
 }  
+
+@media screen and (max-width: 1085px) {
+  .navbar-logo{
+    font-size: 1rem;
+  }
+  .nav-links {
+    padding: 0;
+  
+  }
+
+}

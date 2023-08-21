@@ -23,6 +23,7 @@ export function Students() {
     <div>
         <table className="table">
             <thead>
+
                 <tr>
                     <th>Student_Name</th>
                     <th>Registration_No</th>

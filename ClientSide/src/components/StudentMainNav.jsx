@@ -12,7 +12,7 @@ export function Mainnav() {
  
   return (
     <div className='mainnav'>
-        <h1>Student Portal</h1>
+    
         {
             student == 'profile' ? (
                 <div className='mainnav-wrapper'>

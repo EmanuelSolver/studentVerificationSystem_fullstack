@@ -4,9 +4,13 @@ import { Context } from '../context/usercontext/context'
 
 function Fee() {
     const { user } = useContext(Context)
-    
+    const year = new Date().getFullYear()
+
   return (
-    <div>
+    <div className='simple-form'>
+        
+        <h2>Tuition and Fees Summary: [{year}/{(year % 100) + 1}]</h2>
+
         <table className='table'>
             <thead>
                 <tr>
@@ -17,11 +21,11 @@ function Fee() {
             </thead>
             <tbody>
                 <tr>
-                    <td>Student_Name</td>
+                    <td>Student Name</td>
                     <td>{user.username}</td>
                 </tr>
                 <tr>
-                    <td>Registration_Number</td> 
+                    <td>Registration Number</td> 
                     <td>{user.id}</td>
                 </tr>
                 <tr>
