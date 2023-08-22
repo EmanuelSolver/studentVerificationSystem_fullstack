@@ -63,7 +63,7 @@ const SignUpForm = () => {
   
       axios.post(`${apiDomain}/register/students`, data)
           .then((response) =>{
-          response.data.message && toast.success(response.data.message, {
+          response.data.message && toast.success('Kindly continue...', {
             position: "top-center",
             autoClose: 3000,
             hideProgressBar: false,
@@ -76,7 +76,7 @@ const SignUpForm = () => {
           console.log(response)
 
           setTimeout(() => {
-            navigate("/studentLogin")
+            navigate("/uploadImage")
         }, 3000);
           
         })

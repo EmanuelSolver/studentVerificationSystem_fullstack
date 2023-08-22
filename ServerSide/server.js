@@ -12,6 +12,10 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(bodyParser.json());
+
+app.use("/images", express.static('images')); //using path lib to access images in folders
+
+
 //jwt middleware
 app.use((req, res, next) => {
     if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {

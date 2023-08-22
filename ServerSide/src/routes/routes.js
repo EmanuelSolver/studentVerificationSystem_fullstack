@@ -1,3 +1,6 @@
+import multer from 'multer';
+import sql from 'mssql';
+import config from '../db/config.js'; 
 import { getStudents,getLecturers, getFeeStatements, getDepartments, getDepartmentNames, getCourseNames } from '../controllers/activityController.js';
 import { studentLogin, registerLecturers,  registerStudents, loginRequired, adminLogin, staffLogin, registerAdmin } from '../controllers/authControllers.js';
 import { BookExam, verifyStudent, verifiedStudents, updatePassword, removeStudent } from '../controllers/portalController.js';
@@ -56,5 +59,36 @@ const routes = (app) => {
         //an admin can be registered only by another admin
     app.route('/register/admin')
         .post(registerAdmin)
+
+
+//upload student profile image
+//setup multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "images"); //null is error
+    },
+    filename: (req, file, cb) => {
+        cb(null, req.body.category_image);
+    },
+});
+
+const upload = multer({ storage: storage }); //upload file
+
+    app.post("/upload", upload.single("file"), async (req, res) => {
+            //single file upload
+            try {
+                const { regNo, category_image } = req.body;
+                let pool = await sql.connect(config.sql);
+                await pool.request()
+                    .input("regNo", sql.VarChar, regNo)
+                    .input("image", sql.VarChar, category_image)
+                    .query("UPDATE StudentsData SET StudentImage = @image WHERE RegNo = @regNo");
+                res.status(201).json({ message: 'Successful Registration' });
+            } catch (error) {
+                res.status(500).json({ error: error.message });
+            } finally {
+                sql.close();
+            }
+        });
 };
 export default routes;

@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import StudentPortal from './pages/StudentPortal';
 import Dashboard from './pages/Dashboard';
 import StaffPortal from './pages/StaffPortal';
+import Upload from './components/UploadImage';
 import { useContext } from 'react';
 import { Context } from './context/usercontext/context';
 
@@ -38,6 +39,8 @@ function App() {
            <Route path="/studentPortal" element={ user ? <StudentPortal /> : < LoginForm />} />
            {/* staff portal */}
            <Route path="/staffPortal" element={<StaffPortal />} />
+          {/* upload student image */}
+          <Route path="/uploadImage" element={<Upload />} />
            {/* Admin dashboard */}
            <Route path="/adminDashboard" element={<Dashboard />} />
           {/* NotFound page */}
