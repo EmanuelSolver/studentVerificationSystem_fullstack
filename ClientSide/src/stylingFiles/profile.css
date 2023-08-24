@@ -4,8 +4,10 @@
 }
 
 .user-image {
-  width: 40%;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
+  margin-left: 25%;
   object-fit: cover;
 }
 
@@ -40,7 +42,7 @@
 }
 
 .table td:hover {
-  color: rgb(43, 66, 110);
+  color: rgb(101, 136, 202);
   transform: scale(1.1);
   transition: all 0.5s ease-in-out;
 }

@@ -3,8 +3,7 @@ import sql from 'mssql';
 import config from '../db/config.js'; 
 import { getStudents,getLecturers, getFeeStatements, getDepartments, getDepartmentNames, getCourseNames } from '../controllers/activityController.js';
 import { studentLogin, registerLecturers,  registerStudents, loginRequired, adminLogin, staffLogin, registerAdmin } from '../controllers/authControllers.js';
-import { BookExam, verifyStudent, verifiedStudents, updatePassword, removeStudent } from '../controllers/portalController.js';
-
+import { BookExam, verified, verifyStudent, verifiedStudents, updatePassword, removeStudent } from '../controllers/portalController.js';
 
 const routes = (app) => {
     //Restricted routes, you have to login first
@@ -17,7 +16,9 @@ const routes = (app) => {
 
     app.route('/lecturers')
         .get(loginRequired, getLecturers)
-        
+    
+    app.route('/verified')
+        .post(loginRequired, verified)
 
     app.route('/verifyStudent')
         .post(loginRequired, verifyStudent)
@@ -62,6 +63,7 @@ const routes = (app) => {
 
 
 //upload student profile image
+;
 //setup multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

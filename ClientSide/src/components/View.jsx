@@ -71,7 +71,7 @@ export function Lecturers() {
     }, [])
 
   return (
-    <div>
+    <div >
         <table className="table">
             <thead>
                 <th>Lecturer_Name</th>
@@ -98,9 +98,7 @@ export function Lecturers() {
               })
         }        
         </tbody>
-        </table>    
-       
-      
+        </table>        
     </div>
   )
 }

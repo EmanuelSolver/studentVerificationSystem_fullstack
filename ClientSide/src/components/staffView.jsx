@@ -6,15 +6,16 @@ import { apiDomain } from '../utils/utils.jsx'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const StaffProfile = () => {
   
   const { user } = useContext(Context)
     
   return (
-  <div className='profile'>
-    
+  <div className='simple-form'>
+    <h1 style={{color:"white", textAlign:"center"}}><i>Staff Profile</i></h1>
     <table className="table">
       <thead>
         <tr>
@@ -55,62 +56,177 @@ export const StaffProfile = () => {
 )
 }
 
-export const Verify = () =>{
 
-  const [result, setResult] = useState();
-  const { user } = useContext(Context)
+export const Verify = () => {
+  const [result, setResult] = useState('');
+ 
+  const { user } = useContext(Context);
 
   const schema = yup.object().shape({
-      code: yup.string().required(),
-  })
-  
-  const { register, handleSubmit, formState: { errors }, reset} = useForm({
-      resolver: yupResolver(schema),
-  })
+    code: yup.string().required(),
+  });
 
-  
-  //send ExamCode to the server
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   const sendData = async (data) => {
-  
-    await axios.post(`${apiDomain}/verifyStudent`, data,{
-          headers: { 'Authorization': `${user.token}` },
-          
-      })
-      .then((response) =>{
-          response.data.message && alert(response.data.message)
-         
-          setResult(response.data[0])
-         
-          reset()
-      })
-      .catch((response) =>{
-          alert(response.data.error);
+    try {
+      const response = await axios.post(`${apiDomain}/verifyStudent`, data, {
+        headers: { 'Authorization': `${user.token}` },
       });
-  };
-  console.log(result)
+  
+      toast.success(response.data.message, {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    
 
-return(
-  <div>
-    <form className="simple-form" onSubmit={handleSubmit(sendData)}>
-          <h3 style={{color:"white", textAlign:"center"}}><i>Verify Student</i></h3>
-          {result? <h3>{result.RegNo}</h3>: <h3>Check ExamCode you Entered</h3> }
-          <div>
-            {/* student image display here  */}
-            {result? <img src={result.ProfileImage} style={{width:"200px"}} alt="image" />: <img src="keyboard.jpg" alt="nopic"/>}
-          </div> 
-          <label htmlFor="">Enter Exam_Code</label><br />
-          <input type="text" placeholder='e.g EX1111' {...register("code")}/>
-            <p>{errors.code?.message}</p>
-          <input  type="submit" style={{width:"70px", fontSize:"20px"}} value="submit"/>
-          <div>
+      setResult(response.data[0])
+     
+      reset();
+    } catch (error) {
+      if (error.response) {
+        toast.error(error.response.data.error, {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      } else {
+        toast.error('An error occurred while verifying student registration', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      }
+    }
+  };
+  
+  const formData = new FormData(); 
+  formData.append('regNo', result.RegNo);
+  formData.append('lecturerId', user.id);
+  console.log(formData.get('regNo'))
+  console.log(formData.get('lecturerId'))
+
+
+  const handleVerify = async () => {
+    if (!result.RegNo) {
+      toast.error('Student registration number is missing.', {
+        // ...toast configuration
+      });
+      return;
+    }
+  
+    // Create a new FormData object to send verification data
+    const verifyFormData = new FormData();
+    verifyFormData.append('regNo', result.RegNo);
+    verifyFormData.append('lecturerId', user.id);
+  
+    try {
+      const response = await axios.post(`${apiDomain}/verified`, verifyFormData, {
+        headers: { 'Authorization': `${user.token}` },
+      });
+  
+      if (response.data.message) {
+        toast.success(response.data.message, {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      } else {
+        setResult('');
+      }
+  
+      reset();
+    } catch (error) {
+      toast.error(error.response.data.error || 'An error occurred while verifying student registration', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
+  };
+  
+
+  return (
+    <div className="simple-form">
+      <form onSubmit={handleSubmit(sendData)}>
+        <h1 style={{ color: "white", textAlign: "center" }}><i>Verify Student</i></h1>
+        <div>
+          {result ? (
+            <img src={`${apiDomain}/images/${result.StudentImage}`} style={{ width: "50%", borderRadius: "10%", marginLeft: "25%" }} alt="image" />
+          ) : (
+            <img style={{ width: "70%", borderRadius: "10%", marginLeft: "15%" }} src="keyboard.jpg" alt="nopic" />
+          )}
+        </div>
+        {result ? (
+         
+          <h2 style={{ color: "white" }}>{result.RegNo} - {result.StudentName}</h2>
+        ) : (
+          <h3 style={{ color: "grey", marginLeft: "10%" }}>Check ExamCode you Entered</h3>
+        )}
+         <div>
             {
-              result && <button type='submit'>Verify</button>
+              result && (
+                <div className='verification' style={{display: "flex"}}>
+                  <input type="button" style={{marginBottom:"10px", backgroundColor:"green", width:"40%", height:"5%", borderRadius:"10%", fontSize:"large", cursor:"pointer"}} onClick={handleVerify} value={"verify"} />
+                  <input type="button" style={{marginBottom:"10px", backgroundColor:"brown", width:"40%", height:"5%", borderRadius:"10%", fontSize:"large", cursor:"pointer"}}  value={"Reject"} onClick={()=>setResult('')}/>
+                </div>
+           
+                ) 
             }
           </div>
-    </form>
-  </div>
-)
-}
+
+        <label htmlFor="">Enter Exam_Code</label><br />
+        <input type="text" placeholder='e.g EX1111' {...register("code")} />
+        <p>{errors.code?.message}</p>
+      
+
+        <input type="submit" style={{ marginLeft: "40%", width: "90px", fontSize: "20px", borderRadius:"5%"}} value="submit" />
+           
+        <ToastContainer
+          position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+        />
+      </form>
+    </div>
+  );
+};
+
 
 
 export const Verified = () =>{
@@ -131,21 +247,16 @@ export const Verified = () =>{
 
   
 return (
-  <div className='profile'>
+  <div className='simple-form'>
+    <h1 style={{color:"white"}}><i>List of Verified Students</i></h1>
       <table className="table">
           <thead>
-            <tr>
-              <th>List_of</th>
-                <th>Verified</th>
-                <th>Students</th>
-            </tr>
+          
               <tr>
                 <th>ID</th>
-              <th>Student_Name</th>
-              <th>Registration_No</th>
-              </tr>
-              
-             
+              <th>Student Name</th>
+              <th>Registration No</th>
+              </tr>    
 
           </thead>
           <tbody>        

@@ -26,7 +26,6 @@ const Header = () => {
                 <Link to="/" className='navbar-logo'>
                   OurCollege <MdSchool />
                 </Link>
-            
               </div>
 
               <ul >

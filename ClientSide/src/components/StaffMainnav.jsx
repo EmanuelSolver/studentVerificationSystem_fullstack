@@ -9,7 +9,7 @@ export function StaffMainnav() {
  
   return (
     <div className='mainnav'>
-        <h1>Staff Portal</h1>
+        
         {
             staff == 'profile' ? (
                 <div className='mainnav-wrapper'>

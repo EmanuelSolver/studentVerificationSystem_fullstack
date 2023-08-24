@@ -42,8 +42,7 @@ const LectureLogin = () => {
     };
 
     return (
-
-      <>
+      <div>
         <div id="background-video">
             <video  autoPlay loop muted>
               <source src="video-2.mp4" type="video/mp4" />
@@ -70,7 +69,7 @@ const LectureLogin = () => {
           <button type="submit">Login</button>
         
       </form>     
-    </>
+    </div>
     
   );
 };

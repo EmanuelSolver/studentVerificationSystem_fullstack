@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
 dotenv.config();
-
 const { GMAIL_PASS } = process.env;
 
 
@@ -74,26 +73,68 @@ export const  BookExam = async(req, res) =>{
     
 }
 
-export const verifyStudent = async(req, res) => {
+
+export const verifyStudent = async (req, res) => {
     try {
         const { code } = req.body;
 
-        let pool = await sql.connect(config.sql);
-        const result = await pool.request()
+        const pool = await sql.connect(config.sql);
+        const { recordset } = await pool.request()
             .input('code', sql.VarChar, code)
-            .query('SELECT e.RegNo, s.ProfileImage FROM ExamRegister e JOIN StudentsData s ON e.RegNo = s.RegNo WHERE ExamCode = @code');
+            .query('SELECT e.RegNo, s.StudentName, s.StudentImage FROM ExamRegister e JOIN StudentsData s ON e.RegNo = s.RegNo WHERE ExamCode = @code');
         
-        !result.recordset[0] ? res.status(404).json({ message: 'Record not found' }) // check if there is a record in the table
-            : res.status(200).json(result.recordset); // return the result
+        if (recordset.length === 0) {
+            return res.status(204).end(); // No Content
+        }
+
+        res.status(200).json(recordset);
     } catch (error) {
-
-        res.status(500).json({ error: 'Student Not Registered for Exam' });
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while verifying student registration' });
     } finally {
-
         sql.close();
-    }   
-}
+    }
+};
 
+
+export const verified = async (req, res) => {
+    const { regNo, lecturerId } = req.body;
+  
+    console.log("Received regNo:", regNo);
+    console.log("Received lecturerId:", lecturerId);
+  
+    const dateTime = new Date();
+  
+    try {
+      let pool = await sql.connect(config.sql);
+      
+      // Check if the student with the given regNo is already verified
+      const result = await pool.request()
+        .input('regNo', sql.VarChar, regNo)
+        .query('SELECT * FROM VerifiedStudents WHERE RegNo = @regNo');
+      
+      const user = result.recordset[0];
+  
+      if (user) {
+        res.status(409).json({ error: 'Student with the same RegNo is already verified' });
+      } else {
+        // Insert the verification data into the database
+        await pool.request()
+          .input('regNo', sql.VarChar, regNo)
+          .input('lecId', sql.Int, lecturerId)
+          .input('date', sql.DateTime, dateTime)
+          .query('INSERT INTO VerifiedStudents (RegNo, LecID, VerificationDate) VALUES (@regNo, @lecId, @date)');
+  
+        res.status(200).send({ message: 'Student Verified' });
+      }
+    } catch (error) {
+      console.error("Error processing verification:", error);
+      res.status(500).json({ error: error.message });
+    } finally {
+      sql.close();
+    }
+  };
+  
 
 export const verifiedStudents = async(req, res) => {
     try {
@@ -112,6 +153,8 @@ export const verifiedStudents = async(req, res) => {
         sql.close(); // Close the SQL connection
     }
 }
+
+
 
 export const updatePassword = async(req, res) =>{
     const { nationalId, password } = req.body;

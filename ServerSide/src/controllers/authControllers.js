@@ -156,7 +156,7 @@ export const studentLogin = async (req, res) => {
 
     const result = await pool.request()
         .input('regNo', sql.VarChar, regNo)
-        .query(`SELECT s.RegNo, s.StudentName, s.Password, s.StudentMail, s.PhoneNumber, s.NationalID, d.DeptName, c.CourseName, f.PayableFee, f.FeePaid, f.Arrears FROM StudentsData s
+        .query(`SELECT s.RegNo, s.StudentName, s.StudentImage, s.Password, s.StudentMail, s.PhoneNumber, s.NationalID, d.DeptName, c.CourseName, f.PayableFee, f.FeePaid, f.Arrears FROM StudentsData s
             JOIN Departments d ON s.DeptID = d.DeptID
             JOIN Courses c ON s.CourseID = c.CourseID
             JOIN Fee f ON  s.RegNo = f.RegNo
@@ -170,7 +170,7 @@ export const studentLogin = async (req, res) => {
             res.status(401).json({ error: 'Authentication failed. Wrong credentials.' });
         } else {
             const token = `JWT ${jwt.sign({ username: user.StudentName, email: user.StudentMail }, config.jwt_secret)}`;
-            res.status(200).json({ email: user.StudentMail, username: user.StudentName, id: user.RegNo, phone: user.PhoneNumber, nationalId: user.NationalID, department: user.DeptName, course: user.CourseName, balance: user.Arrears, PayableFee: user.PayableFee, FeePaid: user.FeePaid, token: token });
+            res.status(200).json({ email: user.StudentMail, image: user.StudentImage, username: user.StudentName, id: user.RegNo, phone: user.PhoneNumber, nationalId: user.NationalID, department: user.DeptName, course: user.CourseName, balance: user.Arrears, PayableFee: user.PayableFee, FeePaid: user.FeePaid, token: token });
         }
     }
 
@@ -183,7 +183,7 @@ export const staffLogin = async (req, res) => {
 
     const result = await pool.request()
         .input('email', sql.VarChar, email)
-        .query("SELECT L.LecName, L.PhoneNumber, L.LecMail, L.Password, L.NationalID, d.DeptName FROM LecturersData L JOIN Departments d ON L.DeptID = d.DeptID WHERE L.LecMail = @email");
+        .query("SELECT L.LecID, L.LecName, L.PhoneNumber, L.LecMail, L.Password, L.NationalID, d.DeptName FROM LecturersData L JOIN Departments d ON L.DeptID = d.DeptID WHERE L.LecMail = @email");
 
     const user = result.recordset[0];
     if (!user) {
@@ -193,7 +193,7 @@ export const staffLogin = async (req, res) => {
             res.status(401).json({ error: 'Wrong credentials.' });
         } else {
             const token = `JWT ${jwt.sign({ username: user.LecName, email: user.LecMail }, config.jwt_secret)}`;
-            res.status(200).json({ email: user.LecMail, username: user.LecName, nationalId: user.NationalID, phoneNo: user.PhoneNumber, department: user.DeptName, token: token });
+            res.status(200).json({ id: user.LecID, email: user.LecMail, username: user.LecName, nationalId: user.NationalID, phoneNo: user.PhoneNumber, department: user.DeptName, token: token });
         }
     }
 

@@ -7,7 +7,6 @@ import '../stylingFiles/StudentRegister.css';
 import '../stylingFiles/StudentLogin.css';
 import { useNavigate } from 'react-router-dom'
 import { apiDomain } from '../utils/utils'
-import imageHolder from '../../public/graduation-icon.svg'
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -63,7 +62,7 @@ const SignUpForm = () => {
   
       axios.post(`${apiDomain}/register/students`, data)
           .then((response) =>{
-          response.data.message && toast.success('Kindly continue...', {
+          response.data.message && toast.success('Kindly continue with Registration...', {
             position: "top-center",
             autoClose: 3000,
             hideProgressBar: false,
@@ -108,11 +107,6 @@ const SignUpForm = () => {
             <div>
               <h2><i>Student Registration</i> </h2>
             </div>
-
-            {/* display selected image */}
-            <div className="profile">
-              <img className="displayImg" src={imageHolder} alt="nopic" />
-            </div> 
             
             <div>
               <label htmlFor="name">Registration No:</label> <br />
@@ -167,7 +161,7 @@ const SignUpForm = () => {
                 <p>{errors.courseId?.message}</p>
             </div>
 
-            <button type="submit" >Submit</button>
+            <button type="submit" >Register</button>
       
             <ToastContainer
               position="top-center"

@@ -45,12 +45,12 @@ const Unenroll = () => {
     <div>
       <form className="simple-form" onSubmit={handleSubmit(handleUnenroll)}>
         <h2>De-Registration Process</h2>
-        <h3>Confirm your Credentials Before Un-enrolling</h3>
+     
 
         <div>
           <label htmlFor="regNo">Reason for UnEnrollment:</label>
           <br />
-          <input type="text" placeholder="Highlight some reasons" {...register('reason')} />
+          <textarea type="text-area" placeholder="Highlight some reasons" {...register('reason')} />
           <p>{errors.reason?.message}</p>
         </div>
 
