@@ -98,19 +98,17 @@ export const verifyStudent = async (req, res) => {
 
 
 export const verified = async (req, res) => {
-    const { regNo, lecturerId } = req.body;
-  
-    console.log("Received regNo:", regNo);
-    console.log("Received lecturerId:", lecturerId);
-  
+    const { reg, id } = req.params
     const dateTime = new Date();
+    console.log("Received regNo:", reg);
+    console.log("Received lecturerId:", id);
   
     try {
       let pool = await sql.connect(config.sql);
       
       // Check if the student with the given regNo is already verified
       const result = await pool.request()
-        .input('regNo', sql.VarChar, regNo)
+        .input('regNo', sql.VarChar, reg)
         .query('SELECT * FROM VerifiedStudents WHERE RegNo = @regNo');
       
       const user = result.recordset[0];
@@ -120,8 +118,8 @@ export const verified = async (req, res) => {
       } else {
         // Insert the verification data into the database
         await pool.request()
-          .input('regNo', sql.VarChar, regNo)
-          .input('lecId', sql.Int, lecturerId)
+          .input('regNo', sql.VarChar, reg)
+          .input('lecId', sql.Int, id)
           .input('date', sql.DateTime, dateTime)
           .query('INSERT INTO VerifiedStudents (RegNo, LecID, VerificationDate) VALUES (@regNo, @lecId, @date)');
   

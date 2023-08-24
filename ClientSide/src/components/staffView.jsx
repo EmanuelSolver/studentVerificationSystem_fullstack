@@ -118,12 +118,6 @@ export const Verify = () => {
     }
   };
   
-  const formData = new FormData(); 
-  formData.append('regNo', result.RegNo);
-  formData.append('lecturerId', user.id);
-  console.log(formData.get('regNo'))
-  console.log(formData.get('lecturerId'))
-
 
   const handleVerify = async () => {
     if (!result.RegNo) {
@@ -134,46 +128,29 @@ export const Verify = () => {
     }
   
     // Create a new FormData object to send verification data
-    const verifyFormData = new FormData();
-    verifyFormData.append('regNo', result.RegNo);
-    verifyFormData.append('lecturerId', user.id);
-  
     try {
-      const response = await axios.post(`${apiDomain}/verified`, verifyFormData, {
-        headers: { 'Authorization': `${user.token}` },
-      });
+      const response = await axios.post(`${apiDomain}/verified/${encodeURIComponent(result.RegNo)}/${encodeURIComponent(user.id)}`,{
+          headers: { Authorization: user.token },
+        }
+      );
   
       if (response.data.message) {
         toast.success(response.data.message, {
-          position: 'top-right',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
+          // ...toast configuration
         });
       } else {
         setResult('');
       }
-  
+
       reset();
     } catch (error) {
       toast.error(error.response.data.error || 'An error occurred while verifying student registration', {
-        position: 'top-right',
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
+        // ...toast configuration
       });
     }
   };
   
-
+  
   return (
     <div className="simple-form">
       <form onSubmit={handleSubmit(sendData)}>

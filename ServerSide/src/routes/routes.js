@@ -17,8 +17,8 @@ const routes = (app) => {
     app.route('/lecturers')
         .get(loginRequired, getLecturers)
     
-    app.route('/verified')
-        .post(loginRequired, verified)
+    app.route('/verified/:reg/:id')
+        .post(verified)
 
     app.route('/verifyStudent')
         .post(loginRequired, verifyStudent)
