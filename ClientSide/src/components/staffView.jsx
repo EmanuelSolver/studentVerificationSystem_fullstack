@@ -248,8 +248,7 @@ return (
                           <td>{ item.StudentName }</td>
                           <td>{ item.RegNo }</td>
                       </tr>                                        
-              )
-              
+              ) 
             })
       }        
       </tbody>
@@ -258,7 +257,7 @@ return (
       <div>
       
       <PDFDownloadLink document={<PdfGenerator data={data} />} fileName="examRegister.pdf">
-        {({ blob, url, loading, error }) =>
+        {({ loading }) =>
            <button className="download-button">
            {loading ? 'Loading document...' : 'Download Register'}
          </button>

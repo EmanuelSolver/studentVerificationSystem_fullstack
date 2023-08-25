@@ -4,12 +4,14 @@ import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
-    backgroundColor: '#E4E4E4'
+    backgroundColor: '#E4E4E4', 
+    fontFamily: 'Times-Roman'
   },
   title: {
-    fontSize: 16,
     marginBottom: 10,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 14
   },
   section: {
     margin: 10,
@@ -24,20 +26,22 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   evenRow: {
-    backgroundColor: '#F0F0F0'
+    backgroundColor: '#F0F0F1'
   },
   oddRow: {
     backgroundColor: '#FFFFFF'
   },
   rowData: {
     flexDirection: 'row',
-    paddingBottom: 5,
-    marginBottom: 5
+    padding: 5,
+    marginBottom: 5,
+    fontSize: 12
   },
   cell: {
     width: '50%',
     paddingLeft: 5,
-  }
+  }, 
+
 });
 
 const PdfGenerator = ({ data }) => (

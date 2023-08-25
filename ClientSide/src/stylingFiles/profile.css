@@ -48,15 +48,7 @@
 }
 
 /* Add this to your CSS stylesheet */
-.download-button> button {
-  background-color: blue;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
+
 
 
 @media screen and (max-width: 747px) {
