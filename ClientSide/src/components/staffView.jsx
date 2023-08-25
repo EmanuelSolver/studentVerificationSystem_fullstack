@@ -8,50 +8,53 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import PdfGenerator from './RegisterDownloader';
+
 
 export const StaffProfile = () => {
   
   const { user } = useContext(Context)
     
   return (
-  <div className='simple-form'>
-    <h1 style={{color:"white", textAlign:"center"}}><i>Staff Profile</i></h1>
-    <table className="table">
-      <thead>
+    <div className='simple-form'>
+      <h1 style={{color:"white", textAlign:"center"}}><i>Staff Profile</i></h1>
+      <table className="table">
+        <thead>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr >
+            <th >Lecturer</th>
+            <th>Credentials</th>
+          </tr>
+        </thead>
+        <tbody>
         <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr >
-          <th >Lecturer</th>
-          <th>Credentials</th>
-        </tr>
-      </thead>
-      <tbody>
-      <tr>
-          <td>National_ID</td>
-          <td>{user.nationalId}</td>
-        </tr>
-        <tr>
-          <td>Lecturer_Name</td>
-          <td>{user.username}</td>
-        </tr>
-        <tr>
-          <td>Lecturer_Email</td>
-          <td>{user.email}</td>
-        </tr>
-        <tr>
-          <td>Mobile_Number</td>
-          <td>{user.phoneNo}</td>
-        </tr>
-        <tr>
-          <td>Department</td>
-          <td>{user.department}</td>
-        </tr>
-        
-      </tbody>
-    </table>
-     
+            <td>National_ID</td>
+            <td>{user.nationalId}</td>
+          </tr>
+          <tr>
+            <td>Lecturer_Name</td>
+            <td>{user.username}</td>
+          </tr>
+          <tr>
+            <td>Lecturer_Email</td>
+            <td>{user.email}</td>
+          </tr>
+          <tr>
+            <td>Mobile_Number</td>
+            <td>{user.phoneNo}</td>
+          </tr>
+          <tr>
+            <td>Department</td>
+            <td>{user.department}</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      
     </div>  
 )
 }
@@ -225,7 +228,7 @@ export const Verified = () =>{
   
 return (
   <div className='simple-form'>
-    <h1 style={{color:"white"}}><i>List of Verified Students</i></h1>
+      <h1 style={{color:"white"}}><i>List of Verified Students</i></h1>
       <table className="table">
           <thead>
           
@@ -240,19 +243,28 @@ return (
       {
           data && data.map((item, index) => {
               return (
-                  <>
                       <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{ item.StudentName }</td>
                           <td>{ item.RegNo }</td>
-                      </tr>                     
-                  </>                   
+                      </tr>                                        
               )
               
             })
       }        
       </tbody>
-      </table>    
+      </table> 
+
+      <div>
+      
+      <PDFDownloadLink document={<PdfGenerator data={data} />} fileName="examRegister.pdf">
+        {({ blob, url, loading, error }) =>
+           <button className="download-button">
+           {loading ? 'Loading document...' : 'Download Register'}
+         </button>
+        }
+      </PDFDownloadLink>
+    </div>   
   </div>
 )
 }
