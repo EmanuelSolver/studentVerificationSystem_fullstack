@@ -49,8 +49,8 @@ export const  BookExam = async(req, res) =>{
             const mailOptions = {
                 from: 'personalmygallery@gmail.com', // Sender address
                 to: receiver, // Recipient address
-                subject: 'Unique Student Exam Code', // Subject line
-                html: `Hello ${studentName}, <br> Exam Code for ${regNo} is <b>${examCode} </b> <br> Kindly don't share this unique code`, // Plain text body
+                subject: 'OurCollege:    Unique Exam Code', // Subject line
+                html: `Hello ${studentName}, <br><br> Exam Code for ${regNo} is <h2>${examCode} </h2> <br> Kindly don't share this unique code`, // Plain text body
                 // html: '<b>This is the HTML version of the email.</b>' // HTML body
             };
 
@@ -72,6 +72,7 @@ export const  BookExam = async(req, res) =>{
     }
     
 }
+
 
 export const verifyStudent = async (req, res) => {
     try {
