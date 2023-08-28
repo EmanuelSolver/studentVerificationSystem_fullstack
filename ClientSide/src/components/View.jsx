@@ -20,16 +20,16 @@ export function Students() {
 
     
   return (
-    <div>
+    <div className='simple-form'>
         <table className="table">
             <thead>
 
                 <tr>
-                    <th>Student_Name</th>
-                    <th>Registration_No</th>
-                    <th>Mobile_Number</th>
-                    <th>National_ID</th>
-                    <th>Email</th>
+                    <th>Student Name</th>
+                    <th>Registration No</th>
+                    <th>Mobile Number</th>
+                    <th>National ID</th>
+                    <th>Student Email</th>
                 </tr>
             </thead>
             <tbody>        
@@ -55,6 +55,8 @@ export function Students() {
   )
 }
 
+
+
 export function Lecturers() {
     const { user } = useContext(Context)
     const [data, setData] = useState([])
@@ -71,7 +73,7 @@ export function Lecturers() {
     }, [])
 
   return (
-    <div >
+    <div className='simple-form'>
         <table className="table">
             <thead>
                 <th>Lecturer_Name</th>
@@ -103,6 +105,8 @@ export function Lecturers() {
   )
 }
 
+
+
 export function FeeStatement() {
     const { user } = useContext(Context)
     const [fee, setFee] = useState([])
@@ -120,7 +124,7 @@ export function FeeStatement() {
     }, [])
 
   return (
-    <div>
+    <div className='simple-form'>
         <table className='table'>
             <thead>
                 <tr>.</tr>

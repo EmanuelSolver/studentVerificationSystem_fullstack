@@ -11,7 +11,7 @@ export function AdminMainnav() {
  
   return (
     <div className='mainnav'>
-          <h1>Admin Dashboard</h1>
+
         {
             admin == 'viewStudents' ? (
                 <div className='mainnav-wrapper'>
@@ -41,11 +41,6 @@ export function AdminMainnav() {
                 </div>
             ): null
         }
-       
-    
-       
-
- 
     </div>
   )
 }

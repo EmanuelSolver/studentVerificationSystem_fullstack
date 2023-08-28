@@ -4,6 +4,7 @@ import { FaBookReader } from 'react-icons/fa'
 import { FaMoneyCheckAlt } from 'react-icons/fa'
 import { AiOutlineUserAdd } from 'react-icons/ai'
 import { FcCancel } from 'react-icons/fc'
+import { ImProfile } from 'react-icons/im'
 import { Context } from '../context/adminContext/context'
 import { useContext } from 'react'
 
@@ -46,7 +47,7 @@ export function AdminSidenav() {
         </div>
 
         <div className="sidenav-wrapper">
-            <div className="sidenav-title" onClick={handleLecturers}><CgProfile/> Lecturers </div>
+            <div className="sidenav-title" onClick={handleLecturers}><ImProfile/> Lecturers </div>
         </div>
 
         <div className="sidenav-wrapper">

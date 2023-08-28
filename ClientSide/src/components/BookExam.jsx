@@ -6,6 +6,8 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import '../stylingFiles/StudentRegister.css';
+import {toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function BookExam() {
     const { user } = useContext(Context)
@@ -20,7 +22,7 @@ function BookExam() {
 
     const checkFee = ()=>{
         if(user.balance > 0){
-            alert('Clear the Fee Balance')
+            toast.error('Clear the Fee Balance')
         }
     }
 
@@ -29,11 +31,11 @@ function BookExam() {
             headers: { 'Authorization': `${user.token}` },
         })
         .then((response) =>{
-            response.data.message && alert(response.data.message)
+            response.data.message && toast.success(response.data.message)
             reset()
         })
         .catch((response) =>{
-            alert(response.data.error);
+            toast.error(response.data.error);
         });
     };
 
@@ -45,6 +47,19 @@ function BookExam() {
             <input type="text" {...register("regNo")}/>
             <p>{errors.regNo?.message}</p>
             <button type='submit' onClick={checkFee}>Book</button>
+      
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+              />
       </form>
     </div>
   )

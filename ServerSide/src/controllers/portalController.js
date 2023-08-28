@@ -73,7 +73,6 @@ export const  BookExam = async(req, res) =>{
     
 }
 
-
 export const verifyStudent = async (req, res) => {
     try {
         const { code } = req.body;
@@ -100,8 +99,6 @@ export const verifyStudent = async (req, res) => {
 export const verified = async (req, res) => {
     const { reg, id } = req.params
     const dateTime = new Date();
-    console.log("Received regNo:", reg);
-    console.log("Received lecturerId:", id);
   
     try {
       let pool = await sql.connect(config.sql);
@@ -151,7 +148,6 @@ export const verifiedStudents = async(req, res) => {
         sql.close(); // Close the SQL connection
     }
 }
-
 
 
 export const updatePassword = async(req, res) =>{

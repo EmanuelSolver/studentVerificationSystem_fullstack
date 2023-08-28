@@ -21,9 +21,10 @@ const Home = () => {
             </div>
             <div>
             <span className="sub-head">Learn with us</span>
+            <hr />
             <p >Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident quisquam, cum excepturi fuga eveniet sapiente sit? Repellat nostrum reprehenderit necessitatibus, quasi, excepturi, ipsa assumenda magnam incidunt obcaecati facilis enim perspiciatis? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Deleniti qui nemo beatae consectetur laboriosam voluptates ipsam natus blanditiis enim, in ducimus atque officiis? Adipisci, facilis iste labore impedit totam repellat!</p>
             
-            <button className="button">Visit Us</button>
+            <button className="button">Join Us</button>
             </div>
           </div>
         </div>
