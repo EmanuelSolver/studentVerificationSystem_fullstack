@@ -3,6 +3,7 @@ import { Context } from '../context/studentContext/context'
 import { useContext } from 'react'
 import Profile from './Profile'
 import Fee from './Fee'
+import SelectUnits from './SelectUnits'
 import BookExam from './BookExam'
 import UpdatePassword from './UpdatePassword'
 import Unenroll from './Unenroll'
@@ -18,7 +19,11 @@ export function Mainnav() {
                 <div className='mainnav-wrapper'>
                     <Profile/>
                 </div>
-            ): student == 'exam' ? (
+            ):  student == 'units' ? (
+                <div className='mainnav-wrapper'>
+                    <SelectUnits />
+                </div>
+            ):  student == 'exam' ? (
                 <div className='mainnav-wrapper'>
                     <BookExam />
                 </div>

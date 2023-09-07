@@ -74,6 +74,35 @@ export const  BookExam = async(req, res) =>{
 };
 
 
+export const saveUnits = async (req, res) => {
+  try {
+    const { selectedUnits } = req.body; // Assuming you are sending selected units in the request body
+    const { regNo } = req.params; 
+    let pool = await sql.connect(config.sql); // Establish a connection to the database
+
+    // Construct a SQL query to insert the selected units into a database table
+    const query = `
+    INSERT INTO SelectedUnits (RegNo, UnitName)
+    VALUES ${selectedUnits.map((unit) => `('${regNo}', '${unit}')`).join(', ')}
+  `;
+
+    const result = await pool.request().query(query);
+
+    // Check if the query was successful
+    if (result.rowsAffected.length > 0) {
+      res.status(200).json({ message: 'Selected units saved successfully' });
+    } else {
+      res.status(500).json({ error: 'Failed to save selected units' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  } finally {
+    sql.close(); // Close the SQL connection
+  }
+};
+
+
+
 export const verifyStudent = async (req, res) => {
   try {
       const { code } = req.body;

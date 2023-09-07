@@ -9,6 +9,10 @@ const Reducer = (state, action) => {
             return{
                 student: action.payload,
             }
+        case "UNITS":
+            return{
+                    student: action.payload,
+            }    
         case "BOOK_EXAM":
             return{
                 student: action.payload,
