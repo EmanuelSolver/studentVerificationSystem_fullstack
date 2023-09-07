@@ -167,7 +167,10 @@ export const Verify = () => {
         </div>
         {result ? (
          
-          <h2 style={{ color: "white" }}>{result.RegNo} - {result.StudentName}</h2>
+         <div>
+            <h2 style={{ color: "white" }}>{result.RegNo} - {result.StudentName} </h2>
+            <h2>Fee Bal: {result.Arrears}</h2>
+         </div>
         ) : (
           <h3 style={{ color: "grey", marginLeft: "10%" }}>Check ExamCode you Entered</h3>
         )}
@@ -233,20 +236,22 @@ return (
           <thead>
           
               <tr>
-                <th>ID</th>
-              <th>Student Name</th>
-              <th>Registration No</th>
+                <th></th>
+                <th>Student Name</th>
+                <th>Registration No</th>
+                <th>Verified By</th>
               </tr>    
 
           </thead>
           <tbody>        
-      {
-          data && data.map((item, index) => {
+          {
+            data && data.map((item, index) => {
               return (
                       <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{ item.StudentName }</td>
                           <td>{ item.RegNo }</td>
+                          <td>{ item.LecName }</td>
                       </tr>                                        
               ) 
             })

@@ -9,7 +9,7 @@ function Fee() {
   return (
     <div className='simple-form'>
         
-        <h2>Tuition and Fees Summary: [{year}/{(year % 100) + 1}]</h2>
+        <h2>Tuition & Fee Summary: [{year}/{(year % 100) + 1}]</h2>
 
         <table className='table'>
             <thead>
@@ -21,13 +21,14 @@ function Fee() {
             </thead>
             <tbody>
                 <tr>
-                    <td>Student Name</td>
-                    <td>{user.username}</td>
-                </tr>
-                <tr>
                     <td>Registration Number</td> 
                     <td>{user.id}</td>
                 </tr>
+                <tr>
+                    <td>Student Name</td>
+                    <td>{user.username}</td>
+                </tr>
+               
                 <tr>
                     <td>Payable Fee</td> 
                     <td> {user.PayableFee}.00</td>

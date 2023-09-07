@@ -43,7 +43,7 @@ CREATE TABLE StudentsData(
 --stores details of students who have registered for exams
 CREATE TABLE ExamRegister(
 	ID INT IDENTITY(1, 1),
-	RegNo VARCHAR(30) NOT NULL,
+	RegNo VARCHAR(30) UNIQUE NOT NULL,
 	ExamCode VARCHAR(10) NOT NULL,
 
 	PRIMARY KEY(ID),

@@ -71,30 +71,42 @@ export const  BookExam = async(req, res) =>{
         
     }
     
-}
+};
 
 
 export const verifyStudent = async (req, res) => {
-    try {
-        const { code } = req.body;
+  try {
+      const { code } = req.body;
 
-        const pool = await sql.connect(config.sql);
-        const { recordset } = await pool.request()
-            .input('code', sql.VarChar, code)
-            .query('SELECT e.RegNo, s.StudentName, s.StudentImage FROM ExamRegister e JOIN StudentsData s ON e.RegNo = s.RegNo WHERE ExamCode = @code');
-        
-        if (recordset.length === 0) {
-            return res.status(204).end(); // No Content
-        }
+      const pool = await sql.connect(config.sql);
+      const { recordset } = await pool.request()
+          .input('code', sql.VarChar, code)
+          .query(`SELECT e.RegNo, s.StudentName, s.StudentImage, F.Arrears
+          FROM ExamRegister e
+          JOIN StudentsData s ON e.RegNo = s.RegNo
+          LEFT JOIN Fee F ON e.RegNo = F.RegNo
+          WHERE ExamCode = @code
+          `);
 
-        res.status(200).json(recordset);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'An error occurred while verifying student registration' });
-    } finally {
-        sql.close();
-    }
+      if (recordset.length === 0) {
+          return res.status(204).end(); // No Content
+      }
+
+      // Check if Arrears is equal to or below 0
+      const arrears = recordset[0].Arrears;
+      if (arrears <= 0) {
+          return res.status(200).json(recordset);
+      } else {
+          return res.status(201).json({ error: 'Clear the fee' });
+      }
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'An error occurred while verifying student registration' });
+  } finally {
+      sql.close();
+  }
 };
+
 
 
 export const verified = async (req, res) => {
@@ -129,14 +141,17 @@ export const verified = async (req, res) => {
     } finally {
       sql.close();
     }
-  };
-  
+};
+   
 
 export const verifiedStudents = async(req, res) => {
     try {
         let pool = await sql.connect(config.sql);  //establish a connection to the database
         const result = await pool.request()        // make a request to the database
-            .query("SELECT v.RegNo, s.StudentName FROM VerifiedStudents v JOIN StudentsData s ON v.RegNo = s.RegNo");     // query the employees table in the database
+          .query(`SELECT v.RegNo, s.StudentName, L.LecName
+                FROM VerifiedStudents v
+                JOIN StudentsData s ON v.RegNo = s.RegNo
+                JOIN LecturersData L ON L.LecID = v.LecID`);     // query the employees table in the database
 
         !result.recordset[0] ? res.status(404).json({ message: 'Record not found' }) // check if there is a record in the table
             : res.status(200).json(result.recordset); // return the result
