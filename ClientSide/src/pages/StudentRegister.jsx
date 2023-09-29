@@ -22,7 +22,6 @@ const SignUpForm = () => {
       const getDepartments = async () => {
         try {
             const response = await axios.get(`${apiDomain}/departmentNames`);
-            console.log(response.data); // Log the response to check its structure
             setDepartment(response.data);
         } catch (error) {
             console.error('Error fetching department data:', error);
@@ -167,7 +166,7 @@ const SignUpForm = () => {
               <select name="course" id="course" {...register("courseId")}>
                 <option> - select - </option>
                     {course && Array.isArray(course) && course.map((item, index) => (
-                    <option key={index} value={item.CourseName}>{item.CourseName}</option>
+                    <option key={index} value={index + 1}>{item.CourseName}</option>
                 ))}
               </select>
 

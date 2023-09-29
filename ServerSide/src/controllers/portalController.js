@@ -22,10 +22,8 @@ export const  BookExam = async(req, res) =>{
     if(user){
 
         if(user.Arrears <= 0){
-            //Generate an exam code to send to student
-            const examCode = ''
-            //const examCode = 'EX' + (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
-            function createUniqueNumberGenerator(min = 1000, max = 100000) {
+            //Generate an exam code to send to student using the shuffling algorithm ( Fisher-Yates Shuffle)
+            function createUniqueNumberGenerator(min, max) {
               if (max - min + 1 <= 20000) {
                 throw new Error('Range is too small to guarantee 20,000 unique numbers.');
               }
@@ -43,23 +41,19 @@ export const  BookExam = async(req, res) =>{
                 } while (usedNumbers.has(randomNum));
             
                 usedNumbers.add(randomNum);
-                examCode = randomNum;
                 return randomNum;
               }
             
               return generateUniqueNumber;
             }
             
-            // const min = 1000;
-            // const max = 100000; // Adjust the range as needed
-            
-            // const generateUniqueNumber = createUniqueNumberGenerator(min, max);
-            
+            const min = 1000;
+            const max = 100000; // Adjust the range as needed
+            const generateUniqueNumber = createUniqueNumberGenerator(min, max);
             // Generate one unique random number
-            // const randomUniqueNumber = generateUniqueNumber();
-            // console.log(randomUniqueNumber);
-            console.log(examCode)
-
+            const randomUniqueNumber = generateUniqueNumber();
+            
+            const examCode = 'EX' + randomUniqueNumber;
             const receiver = user.StudentMail
             const studentName = user.StudentName
             const regNo = user.RegNo
@@ -69,7 +63,7 @@ export const  BookExam = async(req, res) =>{
                 .input('examCode', sql.VarChar, examCode)
                 .input('regNo', sql.VarChar, regNo)
                 .query('INSERT INTO ExamRegister (RegNo, ExamCode) VALUES (@regNo, @examCode)');
-                res.status(200).send({ message: `Booked Exam successfully` });
+                res.status(200).send({ message: `Booked successfully, check your email for Exam code` });
 
             // Create a transporter using SMTP settings for Gmail
             const transporter = nodemailer.createTransport({
@@ -84,9 +78,8 @@ export const  BookExam = async(req, res) =>{
             const mailOptions = {
                 from: 'personalmygallery@gmail.com', // Sender address
                 to: receiver, // Recipient address
-                subject: 'OurCollege:    Unique Exam Code', // Subject line
-                html: `Hello ${studentName}, <br><br> Exam Code for ${regNo} is <h2>${examCode} </h2> <br> Kindly don't share this unique code`, // Plain text body
-                // html: '<b>This is the HTML version of the email.</b>' // HTML body
+                subject: 'OurCollege: Exam Code', // Subject line
+                html: `Hello ${studentName}, <br><br><h5> Exam Code for ${regNo} is: </h5><h2>${examCode} </h2> <br> Kindly don't share this unique code`, // Plain text body
             };
 
             // Send the email
@@ -170,7 +163,6 @@ export const saveUnits = async (req, res) => {
     // pool.close();
   }
 };
-
 
 
 
