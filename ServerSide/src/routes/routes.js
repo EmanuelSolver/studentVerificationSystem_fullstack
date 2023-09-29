@@ -31,7 +31,7 @@ const routes = (app) => {
         .get(loginRequired, getStudents)
         .delete(loginRequired, removeStudent)
     
-    app.route('/save-units/:regNo')
+    app.route('/saveUnits')
         .post(loginRequired, saveUnits)
 
     // open routes

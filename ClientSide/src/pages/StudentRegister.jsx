@@ -18,15 +18,26 @@ const SignUpForm = () => {
       const [department, setDepartment] = useState([])
       const [course, setCourse] = useState([])
 
+      //get departments
       const getDepartments = async () => {
-          const response = await axios.get(`${apiDomain}/departmentNames`,)
-          setDepartment(response.data)
+        try {
+            const response = await axios.get(`${apiDomain}/departmentNames`);
+            console.log(response.data); // Log the response to check its structure
+            setDepartment(response.data);
+        } catch (error) {
+            console.error('Error fetching department data:', error);
+        }
       }
+    
 
       //get courses
       const getCourses = async () => {
-        const res = await axios.get(`${apiDomain}/courseNames`,)
-        setCourse(res.data)
+        try{
+          const res = await axios.get(`${apiDomain}/courseNames`,)
+          setCourse(res.data)
+        }catch(error){
+          console.error('Error fetching courses data:', error);
+        }
     }
 
     useEffect(() =>{
@@ -140,24 +151,26 @@ const SignUpForm = () => {
 
             <div>
               <label htmlFor="name">Department:</label>
-                <select name="department" id="department" {...register("deptId")}>
-                    <option > - select - </option>
-                    {department.map((dept, index) => (
-                        <option key={index} value={index + 1}>({dept.DeptInitials}) {dept.DeptName} </option>
-                    ))}
-                </select>
+              <select name="department" id="department" {...register("deptId")}>
+                <option > - select - </option>
+                {department && Array.isArray(department) && department.map((dept, index) => (
+                    <option key={index} value={index + 1}>({dept.DeptInitials}) {dept.DeptName} </option>
+                ))}
+              </select>
+
               
                 <p>{errors.deptId?.message}</p>
             </div>
 
             <div>
               <label htmlFor="name">Course:</label>
-                <select name="course" id="course" {...register("courseId")}>
-                    <option > - select - </option>
-                    {course.map((item, index) => (
-                        <option key={index} value={index + 1}>{item.CourseName}</option>
-                    ))}
-                </select>
+              <select name="course" id="course" {...register("courseId")}>
+                <option> - select - </option>
+                    {course && Array.isArray(course) && course.map((item, index) => (
+                    <option key={index} value={item.CourseName}>{item.CourseName}</option>
+                ))}
+              </select>
+
                 <p>{errors.courseId?.message}</p>
             </div>
 

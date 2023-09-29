@@ -1,9 +1,8 @@
-import sql from 'mssql';
+import sql from 'mssql'
 import config from '../db/config.js'
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
-dotenv.config();
 const { GMAIL_PASS } = process.env;
 
 
@@ -24,7 +23,43 @@ export const  BookExam = async(req, res) =>{
 
         if(user.Arrears <= 0){
             //Generate an exam code to send to student
-            const examCode = 'EX' + (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+            const examCode = ''
+            //const examCode = 'EX' + (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+            function createUniqueNumberGenerator(min = 1000, max = 100000) {
+              if (max - min + 1 <= 20000) {
+                throw new Error('Range is too small to guarantee 20,000 unique numbers.');
+              }
+            
+              const usedNumbers = new Set();
+            
+              function generateUniqueNumber() {
+                if (usedNumbers.size >= 20000) {
+                  throw new Error('More than 20,000 unique numbers have been generated.');
+                }
+            
+                let randomNum;
+                do {
+                  randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+                } while (usedNumbers.has(randomNum));
+            
+                usedNumbers.add(randomNum);
+                examCode = randomNum;
+                return randomNum;
+              }
+            
+              return generateUniqueNumber;
+            }
+            
+            // const min = 1000;
+            // const max = 100000; // Adjust the range as needed
+            
+            // const generateUniqueNumber = createUniqueNumberGenerator(min, max);
+            
+            // Generate one unique random number
+            // const randomUniqueNumber = generateUniqueNumber();
+            // console.log(randomUniqueNumber);
+            console.log(examCode)
+
             const receiver = user.StudentMail
             const studentName = user.StudentName
             const regNo = user.RegNo
@@ -75,31 +110,67 @@ export const  BookExam = async(req, res) =>{
 
 
 export const saveUnits = async (req, res) => {
+  dotenv.config();
+
   try {
-    const { selectedUnits } = req.body; // Assuming you are sending selected units in the request body
-    const { regNo } = req.params; 
-    let pool = await sql.connect(config.sql); // Establish a connection to the database
+    const { regNo, selectedItems } = req.body;
 
-    // Construct a SQL query to insert the selected units into a database table
-    const query = `
-    INSERT INTO SelectedUnits (RegNo, UnitName)
-    VALUES ${selectedUnits.map((unit) => `('${regNo}', '${unit}')`).join(', ')}
-  `;
+    // Check if the student with the same RegNo has already registered units
+    const checkQuery = `
+      SELECT COUNT(*) AS count
+      FROM SelectedUnits
+      WHERE RegNo = @regNo
+    `;
 
-    const result = await pool.request().query(query);
+    let pool = await sql.connect(config.sql);
 
-    // Check if the query was successful
-    if (result.rowsAffected.length > 0) {
-      res.status(200).json({ message: 'Selected units saved successfully' });
+    const checkResult = await pool.request()
+      .input('regNo', sql.VarChar, regNo)
+      .query(checkQuery);
+
+    if (checkResult.recordset[0].count > 0) {
+      res.status(400).json({ error: 'Student with the same registration number has already registered units' });
     } else {
-      res.status(500).json({ error: 'Failed to save selected units' });
+      // Create an array to hold the parameters for each unit
+      const params = selectedItems.map((unit, index) => ({
+        regNo: sql.VarChar,
+        unit: sql.VarChar,
+        value: unit,
+        paramName: `@unit${index}`,
+      }));
+
+      // Construct a dynamic parameterized query for inserting selected units
+      const insertQuery = `
+        INSERT INTO SelectedUnits (RegNo, UnitName)
+        VALUES ${params.map((param) => `(@regNo, ${param.paramName})`).join(', ')}
+      `;
+
+      const insertResult = await pool.request();
+
+      // Add parameters to the request for each unit
+      params.forEach((param) => {
+        insertResult.input('regNo', param.regNo, regNo);
+        insertResult.input(param.paramName, param.unit, param.value);
+      });
+
+      // Execute the batch insert query
+      await insertResult.batch(insertQuery);
+
+      // Check if the insert query was successful
+      if (insertResult.rowsAffected.length > 0) {
+        res.status(200).json({ message: 'Selected units saved successfully' });
+      } else {
+        res.status(500).json({ error: 'Failed to save selected units' });
+      }
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
   } finally {
-    sql.close(); // Close the SQL connection
+    // Close the SQL connection (you can uncomment this if needed)
+    // pool.close();
   }
 };
+
 
 
 
